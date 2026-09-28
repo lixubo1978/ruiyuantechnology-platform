@@ -1,8 +1,11 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "ruiyuantechnology-platform",
+  "main": "worker.js",
   "compatibility_date": "2026-09-28",
   "assets": {
-    "directory": "./public"
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/ruiyuan", "/api/ruiyuan/*"]
   }
 }
