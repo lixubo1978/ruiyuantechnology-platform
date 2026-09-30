@@ -1,28 +1,123 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="了解瑞渊的业务方向与协作理念。员工可通过员工通道进入办公系统。">
-<meta name="theme-color" content="#173f34">
-<title>瑞渊 · 企业介绍</title>
-<style>
-:root{--green:#173f34;--ink:#203c32;--muted:#687e73;--paper:#f6f7f2;--line:#dce4da;--lime:#d8edab}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif}a{color:inherit}button{font:inherit}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #86ae49;outline-offset:5px}.wrap{max-width:1160px;margin:auto;padding:0 28px}.site-header{position:sticky;top:0;z-index:5;background:#f6f7f2f5;border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}.header-inner{min-height:88px;display:flex;align-items:center;justify-content:space-between;gap:24px}.brand{text-decoration:none;font-size:25px;font-weight:750;letter-spacing:3px;white-space:nowrap}.brand small{display:block;line-height:1;font-size:9px;letter-spacing:3px;font-weight:500;color:var(--muted)}nav{display:flex;align-items:center;gap:26px}nav a{text-decoration:none;font-size:14px}nav a:hover{color:#64822e}.button{display:inline-flex;align-items:center;justify-content:center;gap:18px;min-height:46px;padding:10px 22px;border:1px solid var(--green);border-radius:6px;text-decoration:none;font-weight:600;font-size:14px;background:var(--green);color:white}.button.light{background:transparent;color:var(--green)}.hero{padding:84px 0 68px;display:grid;grid-template-columns:1.1fr .9fr;gap:65px;align-items:center}.eyebrow{color:var(--muted);font-size:12px;letter-spacing:2px;text-transform:uppercase;margin:0 0 24px}.eyebrow:before{content:'';display:inline-block;width:24px;height:1px;background:currentColor;vertical-align:middle;margin-right:12px}h1{font-size:clamp(38px,5vw,62px);letter-spacing:-2px;line-height:1.25;font-weight:650;margin:0 0 24px}h1 span{color:#6a8148}p{margin:0 0 18px}.lead{color:var(--muted);max-width:450px;font-size:16px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}.hero-panel{position:relative;min-height:380px;overflow:hidden;background:var(--green);border-radius:14px;color:white;padding:42px;display:flex;flex-direction:column;justify-content:space-between}.hero-panel:before,.hero-panel:after{content:'';position:absolute;width:270px;height:270px;border:1px solid #ffffff20;border-radius:50%;right:-65px;top:20px}.hero-panel:after{width:360px;height:360px;right:-110px;top:-25px}.panel-top{font-size:11px;letter-spacing:3px;color:#b8ccbe;position:relative}.panel-mark{position:relative;font-size:68px;line-height:1.1;font-weight:300;letter-spacing:8px;color:var(--lime);padding:26px 0}.panel-bottom{position:relative;border-top:1px solid #ffffff30;padding-top:22px;display:flex;justify-content:space-between;gap:15px;font-size:13px;color:#d0dfd3}.principles{border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:22px}.principle{padding:24px 18px;display:flex;align-items:center;gap:18px}.principle+.principle{border-left:1px solid var(--line)}.principle small{color:var(--muted);font-size:11px;letter-spacing:1px}.principle strong{font-size:15px;font-weight:550}section.content-section{padding:70px 0;border-bottom:1px solid var(--line)}.section-grid{display:grid;grid-template-columns:1fr 1.55fr;gap:80px}h2{font-size:32px;line-height:1.4;margin:0 0 20px;font-weight:600}h3{font-size:19px;line-height:1.5;margin:0 0 14px}.text{color:var(--muted)}.about-note{border-left:3px solid #92ab64;padding:8px 0 8px 20px;margin-top:24px}.section-heading{display:flex;justify-content:space-between;gap:30px;align-items:end;margin-bottom:30px}.section-heading p{max-width:420px;margin:0 0 20px;color:var(--muted)}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:30px}.card .number{display:block;color:#78904f;font-size:12px;margin-bottom:40px;letter-spacing:2px}.card p{color:var(--muted);font-size:14px;margin:0}.steps{counter-reset:step;display:grid;grid-template-columns:repeat(3,1fr);gap:25px;padding:0;list-style:none;margin:30px 0 0}.steps li{border-top:1px solid #aebda9;padding:20px 0}.steps li:before{counter-increment:step;content:'0' counter(step);display:block;font-size:12px;color:var(--muted);margin-bottom:20px}.steps p{font-size:14px;color:var(--muted)}details{border-bottom:1px solid var(--line);padding:18px 0}details:first-child{border-top:1px solid var(--line)}summary{cursor:pointer;font-weight:550;padding-right:12px}details p{font-size:14px;color:var(--muted);margin:15px 0 5px}.staff{margin:64px 0;display:flex;justify-content:space-between;align-items:center;gap:30px;padding:36px 40px;background:#e8eddf;border-radius:10px}.staff h2{font-size:26px;margin:0 0 8px}.staff p{color:var(--muted);font-size:14px;margin:0}.staff .button{flex-shrink:0}.footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-size:12px}.footer-inner{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.skip{position:absolute;top:-100px;left:20px;background:white;padding:12px;z-index:10}.skip:focus{top:10px}@media(max-width:850px){.hero{gap:32px;padding-top:52px}.hero-panel{padding:30px;min-height:330px}.section-grid{gap:35px}.cards{gap:12px}.card{padding:24px}nav{gap:16px}.principle{gap:10px;padding:20px 12px}}@media(max-width:650px){.wrap{padding:0 20px}.header-inner{min-height:78px;gap:12px}.brand{font-size:22px}nav .section-link{display:none}nav .button{padding:8px 14px;min-height:42px}.hero{grid-template-columns:1fr;padding:42px 0;gap:30px}h1{letter-spacing:-1px}.hero-panel{min-height:265px;padding:28px}.panel-mark{font-size:58px}.principle{flex-direction:column;align-items:start;gap:3px;padding:18px 8px}.principle strong{font-size:13px}.section-grid,.cards,.steps{grid-template-columns:1fr;gap:20px}section.content-section{padding:45px 0}.section-heading{display:block}.card .number{margin-bottom:22px}.section-heading p{margin-bottom:0}.steps{gap:0}.steps li:before{margin-bottom:12px}.staff{margin:40px 0;padding:28px;align-items:start;flex-direction:column;gap:22px}h2{font-size:28px}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-</style>
-</head>
-<body>
-<a class="skip" href="#main">跳转到正文</a>
-<header class="site-header"><div class="wrap header-inner"><a class="brand" href="/introduction.html" aria-label="瑞渊企业介绍首页">瑞渊<small>RUIYUAN</small></a><nav aria-label="主导航"><a class="section-link" href="#about">企业介绍</a><a class="section-link" href="#business">业务方向</a><a class="section-link" href="#faq">常见问题</a><a class="button" href="/ruiyuan_namesandpasswords.html">员工通道 <span aria-hidden="true">↗</span></a></nav></div></header>
-<main class="wrap" id="main">
-<!-- 以下为通用企业介绍文案，可按实际经营业务调整。 -->
-<section class="hero" aria-labelledby="hero-title"><div><p class="eyebrow">Ruiyuan · 企业介绍</p><h1 id="hero-title">让协作更有序，<br><span>让工作更清晰。</span></h1><p class="lead">欢迎了解瑞渊。我们重视清晰的沟通、务实的执行与持续的改进，让每一项工作都有明确的方向。</p><div class="actions"><a class="button" href="#about">了解瑞渊 <span aria-hidden="true">↓</span></a><a class="button light" href="#business">查看业务方向</a></div></div><div class="hero-panel" aria-label="瑞渊：务实、协作、持续改进"><div class="panel-top">RUIYUAN / WORK TOGETHER</div><div class="panel-mark">瑞渊</div><div class="panel-bottom"><span>务实 · 协作 · 持续改进</span><span aria-hidden="true">↗</span></div></div></section>
-<div class="principles" aria-label="协作理念"><div class="principle"><small>01 / CLARITY</small><strong>明确需求</strong></div><div class="principle"><small>02 / TOGETHER</small><strong>高效协作</strong></div><div class="principle"><small>03 / PROGRESS</small><strong>持续改进</strong></div></div>
-<section class="content-section" id="about"><div class="section-grid"><div><p class="eyebrow">About us</p><h2>关于瑞渊</h2></div><div class="text"><p>瑞渊注重业务开展中的沟通与协作，以实际需求为出发点，让计划、执行和反馈相互衔接。</p><p>我们希望通过清晰的分工与有序的管理，减少重复沟通，把时间投入到有价值的工作中，与合作伙伴共同推动项目落实。</p><p class="about-note">认真对待每一次沟通，踏实推进每一项工作。</p></div></div></section>
-<section class="content-section" id="business"><div class="section-heading"><div><p class="eyebrow">Our focus</p><h2>业务与协作方向</h2></div><p>围绕实际工作需求，关注项目推进、业务协同与管理效率。</p></div><div class="cards"><article class="card"><span class="number">01 / 项目</span><h3>项目沟通与推进</h3><p>梳理需求、明确阶段目标，通过及时沟通和进度反馈，推动工作有序开展。</p></article><article class="card"><span class="number">02 / 协同</span><h3>业务协作与衔接</h3><p>重视人员之间的信息同步与任务交接，让合作过程更清楚、工作衔接更顺畅。</p></article><article class="card"><span class="number">03 / 管理</span><h3>办公管理与记录</h3><p>关注日常工作的信息整理与规范记录，为持续改进工作方式提供支持。</p></article></div></section>
-<section class="content-section" id="approach"><p class="eyebrow">How we work</p><h2>从沟通开始，把工作落到实处</h2><ol class="steps"><li><h3>沟通需求</h3><p>了解工作背景与预期目标，明确需要解决的问题。</p></li><li><h3>协同推进</h3><p>确定分工与安排，在推进过程中保持必要的信息同步。</p></li><li><h3>反馈改进</h3><p>回顾执行情况，整理经验，让下一次协作更加顺畅。</p></li></ol></section>
-<section class="content-section" id="faq"><div class="section-grid"><div><p class="eyebrow">Questions & answers</p><h2>常见问题</h2><p class="text">点击问题，展开查看说明。</p></div><div><details><summary>访问企业介绍需要登录吗？</summary><p>不需要。此页面面向访客开放，您可以直接浏览企业介绍、业务方向与协作理念。</p></details><details><summary>员工如何进入办公系统？</summary><p>点击页面上的“员工通道”，进入账号登录页面。登录成功后，可通过“返回办公首页”进入办公系统。</p></details><details><summary>没有员工账号怎么办？</summary><p>如您是公司员工，请联系管理员创建账号。访客浏览此介绍页面无需员工账号。</p></details><details><summary>初次登录后如何修改密码？</summary><p>使用管理员提供的账号和初始密码登录，并按照页面提示修改密码。日后也可在人员与账号页面修改自己的密码。</p></details></div></div></section>
-<section class="staff" aria-labelledby="staff-title"><div><h2 id="staff-title">员工办公入口</h2><p>公司员工请通过专属入口登录，进入日常办公空间。</p></div><a class="button" href="/ruiyuan_namesandpasswords.html">员工通道 <span aria-hidden="true">↗</span></a></section>
-</main>
-<footer class="footer"><div class="wrap footer-inner"><span>瑞渊 RUIYUAN · 企业介绍</span><a href="#main">返回顶部 ↑</a></div></footer>
-</body>
-</html>
+// GitHub 根目录文件名：worker.js
+// Secret：RUIYUAN_SUPABASE_URL、RUIYUAN_SUPABASE_SERVICE_ROLE_KEY
+// 不把真实密钥写进代码，不把账号密码写入日志。
+const COOKIE='__Host-ruiyuan_session';
+const BASE='/api/ruiyuan';
+const json=(data,status=200,extra={})=>new Response(JSON.stringify(data),{status,headers:{
+  'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store',
+  'X-Content-Type-Options':'nosniff',...extra}});
+const hex=bytes=>Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('');
+const sha=async value=>hex(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(value))));
+const equal=(a,b)=>{if(typeof a!=='string'||typeof b!=='string'||a.length!==b.length)return false;let d=0;for(let i=0;i<a.length;i++)d|=a.charCodeAt(i)^b.charCodeAt(i);return d===0};
+const cookie=token=>`${COOKIE}=${token}; Path=/; Secure; HttpOnly; SameSite=Strict; Max-Age=${token?28800:0}`;
+function readToken(req){const raw=req.headers.get('Cookie')||'';for(const item of raw.split(';')){const [k,v]=item.trim().split('=');if(k===COOKIE&&/^[0-9a-f]{64}$/.test(v||''))return v}return ''}
+function route(path,method){
+  const fixed={
+    'POST /employee':'employee','GET /session':'session','POST /login':'login','POST /logout':'logout',
+    'GET /users':'users','POST /users':'create','POST /password':'password'
+  };
+  if(fixed[`${method} ${path}`])return {action:fixed[`${method} ${path}`]};
+  const m=path.match(/^\/users\/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})(\/password)?$/i);
+  if(m&&method==='PATCH'&&!m[2])return {action:'update',id:m[1]};
+  if(m&&method==='POST'&&m[2])return {action:'reset',id:m[1]};return null;
+}
+async function readJSON(req,maxBytes=16384){
+  if(!req.headers.get('Content-Type')?.toLowerCase().startsWith('application/json'))throw new Error('JSON_REQUIRED');
+  if(Number(req.headers.get('Content-Length'))>maxBytes)throw new Error('TOO_LARGE');
+  const reader=req.body?.getReader();if(!reader)throw new Error('BAD_JSON');
+  const chunks=[];let size=0;
+  while(true){const {done,value}=await reader.read();if(done)break;size+=value.length;if(size>maxBytes){await reader.cancel();throw new Error('TOO_LARGE')}chunks.push(value)}
+  const bytes=new Uint8Array(size);let offset=0;for(const c of chunks){bytes.set(c,offset);offset+=c.length}
+  let v;try{v=JSON.parse(new TextDecoder().decode(bytes))}catch{throw new Error('BAD_JSON')}
+  if(!v||typeof v!=='object'||Array.isArray(v))throw new Error('BAD_JSON');return v;
+}
+const PUBLIC_PAGES=new Set(['/introduction.html','/introduction','/introduction/','/ruiyuan_namesandpasswords.html','/ruiyuan_namesandpasswords','/ruiyuan_namesandpasswords/']);
+function pageRedirect(path,clear=false){return new Response(null,{status:302,headers:{Location:path,'Cache-Control':'private, no-store',...(clear?{'Set-Cookie':cookie('')}:{})}})}
+async function servePage(req,env){
+ const response=await env.ASSETS.fetch(req);
+ const headers=new Headers(response.headers);
+ headers.set('Cache-Control','private, no-store');
+ headers.set('X-Content-Type-Options','nosniff');
+ headers.set('Referrer-Policy','same-origin');
+ headers.set('Vary','Cookie');
+ return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
+}
+export default {
+ async fetch(req,env){
+  const url=new URL(req.url);
+  // 所有静态访问先经过这里，只有展示页和登录页公开。
+  if(url.pathname!==BASE&&!url.pathname.startsWith(BASE+'/')){
+   if(url.protocol!=='https:'){url.protocol='https:';return new Response(null,{status:307,headers:{Location:url.href,'Cache-Control':'no-store'}})}
+   if(url.pathname.startsWith('/api/'))return json({error:'接口不存在'},404);
+   if(!['GET','HEAD'].includes(req.method))return json({error:'请求方法不支持'},405);
+   if(PUBLIC_PAGES.has(url.pathname))return servePage(req,env);
+   if(!readToken(req))return pageRedirect('/introduction.html');
+   // 在当前 Worker 内复用现有会话接口，不通过网站 URL 发起循环请求。
+   const session=await this.fetch(new Request(new URL(BASE+'/session',url),{
+    headers:{Cookie:req.headers.get('Cookie')||''}
+   }),env);
+   if(session.status===401)return pageRedirect('/introduction.html',true);
+   if(!session.ok)return new Response('暂时无法验证登录，请稍后刷新，或访问 /introduction.html 查看企业介绍。',{
+    status:503,headers:{'Content-Type':'text/plain; charset=utf-8','Cache-Control':'no-store'}
+   });
+   let data;try{data=await session.json()}catch{return json({error:'登录验证暂不可用'},503)}
+   if(data.user===null)return pageRedirect('/introduction.html',true);
+   if(!data.user||typeof data.user.id!=='string'||typeof data.user.must_change_password!=='boolean')return json({error:'登录验证暂不可用'},503);
+   if(data.user.must_change_password)return pageRedirect('/ruiyuan_namesandpasswords.html');
+   if(['/ruiyuan_employee.html','/ruiyuan_employee','/ruiyuan_employee/'].includes(url.pathname))return pageRedirect('/employees.html');
+   if(data.user.role==='employee'&&!['/employees.html','/employees','/employees/'].includes(url.pathname))return pageRedirect('/employees.html');
+   return servePage(req,env);
+  }
+  try{
+   if(url.protocol!=='https:')return json({error:'请使用 HTTPS 地址'},400);
+   const match=route(url.pathname.slice(BASE.length),req.method);
+   if(!match)return json({error:'瑞渊接口不存在或请求方法不正确'},404);
+   if(req.method!=='GET'&&req.headers.get('Origin')!==url.origin)return json({error:'请求来源不匹配，请在当前网站重新打开页面'},403);
+   if(!env.RUIYUAN_SUPABASE_URL||!env.RUIYUAN_SUPABASE_SERVICE_ROLE_KEY)
+     return json({error:'后台已部署，但尚未配置 Supabase 地址和管理密钥'},503);
+   const token=readToken(req);
+   if(req.method!=='GET'&&match.action!=='login'){
+     if(!token)return json({error:'请先登录'},401,{'Set-Cookie':cookie('')});
+     if(!equal(req.headers.get('X-Ruiyuan-CSRF'),await sha('ruiyuan-csrf:'+token)))return json({error:'会话校验失败，请刷新页面后重试'},403);
+   }
+   const payload=req.method==='GET'?{}:await readJSON(req,match.action==='employee'?3000000:16384);
+   if(match.id)payload.id=match.id;
+   const loginToken=match.action==='login'?hex(crypto.getRandomValues(new Uint8Array(32))):'';
+   const effectiveToken=loginToken||token;
+   if(match.action==='login')payload.client_hash=await sha(req.headers.get('CF-Connecting-IP')||'unknown');
+   const base=new URL(env.RUIYUAN_SUPABASE_URL.trim());
+   if(base.protocol!=='https:'||base.username||base.password)throw new Error('BAD_CONFIG');
+   const key=env.RUIYUAN_SUPABASE_SERVICE_ROLE_KEY.trim();
+   // 支持服务端 secret key，也支持 legacy service_role JWT。
+   const headers={'Content-Type':'application/json',apikey:key};
+   if(key.startsWith('eyJ'))headers.Authorization='Bearer '+key;
+   let response;
+   try{response=await fetch(new URL('/rest/v1/rpc/'+(match.action==='employee'?'ruiyuan_employee_api':'ruiyuan_people_api'),base),{
+     method:'POST',headers,body:JSON.stringify({p_action:match.action==='employee'?payload.op:match.action,
+       p_token_hash:effectiveToken?await sha(effectiveToken):null,p_payload:payload}),
+     signal:AbortSignal.timeout(15000)
+   })}catch{ return json({error:'数据库连接超时或不可用；结果未确认，请先刷新核对，避免重复提交'},503)}
+   if(!response.ok){
+     // 不打印响应正文，数据库错误详情可能包含用户提交的密码。
+     if(response.status===404)return json({error:'未找到数据库后台函数，请安装人员接口及员工模块数据库 SQL'},503);
+     if(response.status===401||response.status===403)return json({error:'Supabase 服务端密钥或接口权限不正确，请检查 Cloudflare 加密变量'},503);
+     return json({error:'数据库接口执行失败，请检查瑞渊表结构和接口 SQL'},503);
+   }
+   const data=await response.json();
+   if(!data||typeof data!=='object'||!Number.isInteger(data.status))return json({error:'后台响应格式不正确'},503);
+   const status=data.status;delete data.status;
+   const extra={};
+   if(status===200&&match.action==='login'){
+     extra['Set-Cookie']=cookie(loginToken);data.csrf_token=await sha('ruiyuan-csrf:'+loginToken);
+   }else if(status===200&&match.action==='session'&&data.user&&token){data.csrf_token=await sha('ruiyuan-csrf:'+token)}
+   if(status===401||data.clear_session||(status===200&&match.action==='logout')||(match.action==='session'&&!data.user))extra['Set-Cookie']=cookie('');
+   delete data.clear_session;
+   if(status===429)extra['Retry-After']='900';
+   return json(data,status,extra);
+  }catch(e){
+    if(['BAD_JSON','JSON_REQUIRED'].includes(e.message))return json({error:'请求必须是 JSON 数据'},400);
+    if(e.message==='TOO_LARGE')return json({error:'提交内容过大'},413);
+    return json({error:'瑞渊后台暂不可用，请检查配置后重试'},503);
+  }
+ }
+};
