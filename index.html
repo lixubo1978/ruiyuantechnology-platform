@@ -1,112 +1,24 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>瑞渊办公管理系统 · 界面预览</title>
-<style>
-*{box-sizing:border-box}body{margin:0;background:#f3f6f5;color:#20362e;font:16px/1.6 system-ui,-apple-system,"Microsoft YaHei",sans-serif}button,input{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #80b494;outline-offset:3px}.layout{display:flex;min-height:100vh}aside{width:230px;flex-shrink:0;background:#163f34;color:white;padding:28px 16px;position:sticky;top:0;height:100vh}.brand{font-size:26px;font-weight:700;padding:0 14px 28px}.brand small{display:block;font-size:12px;letter-spacing:2px;color:#abc3b7}.nav button{display:block;width:100%;text-align:left;padding:13px 16px;margin:5px 0;border:0;border-radius:8px;background:transparent;color:#d5e5dd;font-size:15px}.nav button.active{background:#c8ed8a;color:#173f34;font-weight:600}.aside-note{font-size:13px;color:#adc8ba;padding:25px 14px}main{min-width:0;flex:1}.topbar{background:white;border-bottom:1px solid #e1e9e4;padding:20px 32px;display:flex;justify-content:space-between;font-size:14px}.container{padding:30px 32px;max-width:1500px;margin:auto}.notice{padding:10px 16px;background:#fff4d9;color:#806019;border-radius:8px;font-size:14px;margin-bottom:24px}.head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:25px}h1{margin:0;font-size:28px}h2{font-size:18px;margin:0}p{margin:6px 0;color:#78867e;font-size:14px}.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.btn{border:1px solid #d7e2db;background:white;border-radius:8px;padding:9px 16px;color:#254f3d}.primary{background:#215b46;color:white;border-color:#215b46}input{padding:9px 12px;border:1px solid #d5dfd9;border-radius:7px;background:#fff;min-width:0}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:25px}.card{padding:22px;border:1px solid #dfe8e2;background:white;border-radius:12px}.card:first-child{background:#163f34;color:white}.card .label{font-size:14px;opacity:.8}.card strong{display:block;font-size:28px;margin:12px 0;font-variant-numeric:tabular-nums}.card small{font-size:12px;opacity:.7}.panel{background:white;border:1px solid #e0e8e3;border-radius:12px;margin-bottom:22px;overflow:hidden}.panelhead{padding:18px 22px;border-bottom:1px solid #edf1ee;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.body{padding:22px}.grid{display:grid;grid-template-columns:1.3fr 1fr;gap:22px}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;white-space:nowrap;font-size:14px}th{background:#f8faf9;text-align:left;color:#78887d;font-weight:500}th,td{padding:16px 22px;border-bottom:1px solid #edf1ee}.amount{font-variant-numeric:tabular-nums;font-weight:600}.badge{background:#e8f3e9;color:#36774e;border-radius:5px;padding:4px 9px;font-size:13px}.badge.wait{background:#fff2d6;color:#9b7522}.quick{display:grid;grid-template-columns:1fr 1fr;gap:12px}.quick button{padding:20px 14px;text-align:left;border:1px solid #e1e8e3;background:#fff;border-radius:9px;color:#2c6147}.quick button:hover{background:#f2f7f3}.barrow{display:grid;grid-template-columns:80px 1fr 100px;gap:14px;align-items:center;margin:18px 0;font-size:14px}.track{height:9px;border-radius:8px;background:#eef3ef;overflow:hidden}.track span{display:block;height:100%;background:#76a783}.rule{padding:14px 18px;background:#e9f2ec;color:#476b54;border-radius:8px;font-size:14px;margin-bottom:22px}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tabs button{padding:7px 16px;border:0;background:#eef3ef;color:#426a50;border-radius:7px}.tabs button.selected{background:#215b46;color:#fff}.form{max-width:550px}.field{display:flex;flex-direction:column;gap:7px;margin:18px 0}.field small{color:#77887d;font-size:13px}.muted{font-size:13px;color:#83948a}footer{font-size:12px;color:#84988a;margin:24px 0}.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);max-width:90vw;background:#173f34;color:#fff;border-radius:9px;padding:13px 22px;box-shadow:0 8px 28px #0002;z-index:5}.toast:empty{display:none}@media(max-width:1100px){.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}aside{width:195px}.container{padding:24px}}@media(max-width:700px){.layout{display:block}aside{position:static;width:100%;height:auto;padding:18px 16px}.brand{padding:0 0 12px;font-size:22px}.brand small,.aside-note{display:none}.nav{display:flex;overflow-x:auto;gap:6px}.nav button{width:auto;white-space:nowrap;padding:10px 13px}.container{padding:20px 14px}.topbar{padding:14px 18px}.head{align-items:flex-start;flex-direction:column}.cards{gap:10px}.card{padding:16px}.card strong{font-size:22px}h1{font-size:25px}.panelhead{padding:16px}.barrow{gap:8px;grid-template-columns:75px 1fr 95px}}
-
-[hidden]{display:none!important}.topbar{align-items:center;gap:14px;flex-wrap:wrap}.topbar a{text-decoration:none}.account-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.auth-screen{min-height:100vh;display:grid;place-items:center;padding:24px}.auth-card{max-width:480px;background:white;border:1px solid #dfe8e2;border-radius:14px;padding:32px}.auth-card h1{font-size:24px}.auth-card p{margin:16px 0}.auth-card a{color:#215b46}.auth-card .actions{margin-top:20px}
-</style>
-</head>
-<body>
-<section id="authScreen" class="auth-screen" aria-live="polite"><div class="auth-card"><h1>瑞渊办公</h1><p id="authMessage">正在验证登录状态，请稍候……</p><div class="actions"><button id="retryAuth" class="btn primary" type="button" hidden>重新验证</button><a href="/ruiyuan_namesandpasswords.html">前往登录</a></div><noscript><p>请启用浏览器 JavaScript 后使用办公首页。</p></noscript></div></section>
-<div class="layout" id="officeApp" hidden><aside><div class="brand">瑞渊办公<small>RUIYUAN · OFFICE</small></div><nav class="nav" aria-label="功能模块" id="nav"></nav><div class="aside-note">老板 / 财务工作台<br>单文件界面预览</div></aside><main><header class="topbar"><span id="breadcrumb">工作空间 / 财务总览</span><div class="account-actions"><span id="currentUser"></span><a class="btn" href="/ruiyuan_namesandpasswords.html">人员与账号</a><button class="btn" type="button" id="logoutButton">退出登录</button></div></header><div class="container"><div class="notice">界面演示：所有金额、人员和合同均为示例。登录验证已连接后台；以下账目仍为界面演示，不会修改正式账目。</div><div id="content"></div><footer>人民币 CNY · 已支付报销与工资自动归入支出，避免重复记账。</footer></div></main></div><div id="toast" class="toast" role="status"></div>
-<script>
-const modules=['财务总览','报销与行程','工资流水','合同记录','公司开销','开票与回款','借入资金','起始资金设置'];
-const descriptions=['收入、支出与公司资金余额。','员工费用、出行安排与报销支付。','按工资所属月记录，实际付款后计入支出。','合同资料、客户与履行状态。','报销、工资及其他公司开销统一汇总。','开票与回款分别登记，支持一份合同多笔记录。','借入资金独立分类，到账后计入公司收入。','设置公司合并账户的期初余额。'];
-let current=0,invoiceTab=0,opening=100000,openingDate='2026-09-01';
-const yuan=n=>new Intl.NumberFormat('zh-CN',{style:'currency',currency:'CNY'}).format(n);
-const badge=(s)=>`<span class="badge ${s==='待支付'?'wait':''}">${s}</span>`;
-const money=n=>`<span class="amount">${yuan(n)}</span>`;
-const datasets={
-1:{heads:['员工','出发日期','返程日期','目的地 / 事由','报销金额','支付状态'],rows:[['张明','2026-09-10','2026-09-12','杭州 · 客户项目沟通',money(1800),badge('已支付')],['李丽','2026-09-18','2026-09-19','苏州 · 合同洽谈',money(1200),badge('待支付')]]},
-2:{heads:['工资月份','员工','应发工资','扣款','实发工资','支付日期','状态'],rows:[['2026-09','张明',money(8500),money(500),money(8000),'2026-09-25',badge('已支付')],['2026-09','李丽',money(7500),money(500),money(7000),'2026-09-25',badge('已支付')]]},
-3:{heads:['合同编号','合同名称','客户','签订日期','合同金额','履行状态'],rows:[['RY-2026-001','办公系统服务合同','示例客户 A','2026-09-03',money(50000),badge('履行中')],['RY-2026-002','技术咨询服务合同','示例客户 B','2026-09-08',money(30000),badge('履行中')]]},
-4:{heads:['支付日期','支出事项','来源','收款方','金额'],rows:[['2026-09-12','杭州出差费用','员工报销','张明',money(1800)],['2026-09-25','9 月工资','工资流水','张明',money(8000)],['2026-09-25','9 月工资','工资流水','李丽',money(7000)],['2026-09-05','办公室租金','公司开销','示例物业公司',money(5000)],['2026-09-16','办公用品采购','公司开销','示例供应商',money(800)]]},
-6:{heads:['到账日期','出借方','借入金额','收款账户','约定归还日期','备注'],rows:[['2026-09-20','示例出借方',money(20000),'公司账户','2026-12-20','短期资金周转']]}
-};
-const invoices=[
-{heads:['合同编号','客户','合同金额','累计开票','未开票','累计回款','未回款'],rows:[['RY-2026-001','示例客户 A',money(50000),money(30000),money(20000),money(20000),money(30000)],['RY-2026-002','示例客户 B',money(30000),money(15000),money(15000),money(10000),money(20000)]]},
-{heads:['开票日期','合同编号','发票号码','本次开票金额'],rows:[['2026-09-10','RY-2026-001','示例票号 001',money(30000)],['2026-09-15','RY-2026-002','示例票号 002',money(15000)]]},
-{heads:['到账日期','合同编号','客户','本次回款金额','收款账户'],rows:[['2026-09-12','RY-2026-001','示例客户 A',money(20000),'公司账户'],['2026-09-18','RY-2026-002','示例客户 B',money(10000),'公司账户']]}
-];
-function table(d){return `<div class="scroll"><table><thead><tr>${d.heads.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${d.rows.map(row=>`<tr>${row.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`}
-function panel(title,body){return `<section class="panel"><div class="panelhead"><h2>${title}</h2><span class="muted">2026 年 9 月 · 示例</span></div>${body}</section>`}
-function notify(text){document.getElementById('toast').textContent=text;clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>document.getElementById('toast').textContent='',4000)}
-function navigate(i){current=i;render()}
-function overview(){const cards=[['公司当前余额',opening+27400,'起始资金 + 收入 − 支出'],['本月收入',50000,'合同回款 30,000 + 借入 20,000'],['本月支出',22600,'报销 + 工资 + 公司开销'],['合同待回款',50000,'合同金额减去累计回款']];return `<div class="cards">${cards.map(([l,n,t])=>`<div class="card"><div class="label">${l}</div><strong>${yuan(n)}</strong><small>${t}</small></div>`).join('')}</div><div class="grid">${panel('本月支出构成',`<div class="body">${[['员工报销',1800],['员工工资',15000],['其他开销',5800]].map(([l,n])=>`<div class="barrow"><span>${l}</span><div class="track"><span style="width:${n/22600*100}%"></span></div><span>${yuan(n)}</span></div>`).join('')}</div>`)}${panel('快捷入口',`<div class="body quick">${[1,2,5,6].map(i=>`<button onclick="navigate(${i})">${modules[i]}　→</button>`).join('')}</div>`)}</div>${panel('本月资金概况',table({heads:['项目','金额','说明'],rows:[['起始资金',money(opening),'期初日期：'+openingDate],['合同回款',money(30000),'实际到账收入'],['借入资金',money(20000),'实际到账，单独分类'],['已支付支出',money(22600),'不含待支付报销 1,200 元'],['本月收支净额',money(27400),'不含起始资金']]}))}`}
-function render(){if(!ruiyuanAuth.user)return;document.getElementById('nav').innerHTML=modules.map((x,i)=>`<button class="${i===current?'active':''}" ${i===current?'aria-current="page"':''} onclick="navigate(${i})">${x}</button>`).join('');document.getElementById('breadcrumb').textContent='工作空间 / '+modules[current];let body='';if(current===0)body=overview();else if(current===7)body=panel('公司账户起始资金',`<form class="body form" onsubmit="saveOpening(event)"><div class="rule">当前为界面演示。设置仅在本次打开期间有效，刷新后恢复示例金额。</div><label class="field">期初日期<input type="date" value="2026-09-01" readonly><small>本示例固定从 2026 年 9 月 1 日起计算。</small></label><label class="field">起始资金（元）<input id="opening" type="number" min="0" max="100000000000" step="0.01" required value="${opening}"><small>填写期初日期开始前的公司账户合计余额。</small></label><button class="btn primary" type="submit">应用到预览</button><p>余额 = 起始资金 + 合同回款 + 借入资金 − 已支付支出。</p></form>`);else if(current===5)body=`<div class="rule">开票不影响公司余额；合同回款实际到账后计入收入。</div><div class="panel"><div class="panelhead"><div class="tabs">${['合同汇总','开票明细','回款明细'].map((t,i)=>`<button class="${invoiceTab===i?'selected':''}" onclick="invoiceTab=${i};render()">${t}</button>`).join('')}</div></div>${table(invoices[invoiceTab])}</div>`;else body=(current===4?'<div class="rule">工资与报销实际支付后自动汇总到此处，无需重复录入。本月已支付合计：¥22,600.00。</div>':'')+panel(modules[current]+'明细',table(datasets[current]));document.getElementById('content').innerHTML=`<div class="head"><div><h1>${modules[current]}</h1><p>${descriptions[current]}</p></div><div class="actions"><span class="muted">2026 年 9 月 · 界面预览</span>${current>0&&current<7?'<button class="btn primary" onclick="notify(\'这是界面预览版。正式录入请使用已发布的瑞渊办公系统。\')">＋ 新增记录</button>':''}</div></div>`+body}
-function saveOpening(e){e.preventDefault();const n=Number(document.getElementById('opening').value);if(!Number.isFinite(n)||n<0)return;opening=Math.round(n*100)/100;navigate(0);notify('演示起始资金已更新；刷新后将恢复默认示例。')}
-// 登录状态以后台会话为准，不使用本地登录标记。
-const ruiyuanAuth={user:null,csrf:'',busy:false};
-const authScreen=document.getElementById('authScreen');
-const officeApp=document.getElementById('officeApp');
-const authMessage=document.getElementById('authMessage');
-const retryAuth=document.getElementById('retryAuth');
-function lockOffice(message){
-  officeApp.hidden=true;authScreen.hidden=false;
-  ruiyuanAuth.user=null;ruiyuanAuth.csrf='';
-  document.getElementById('currentUser').textContent='';
-  document.getElementById('content').replaceChildren();
-  authMessage.textContent=message;
-}
-function goLogin(){
-  lockOffice('请登录后进入办公首页。');
-  // 现有登录页登录成功后，可点“返回办公首页”进入。
-  location.replace('/ruiyuan_namesandpasswords.html');
-}
-async function authRequest(path,options={}){
-  const controller=new AbortController();
-  const timer=setTimeout(()=>controller.abort(),15000);
-  try{
-    const response=await fetch('/api/ruiyuan'+path,{
-      ...options,credentials:'same-origin',cache:'no-store',
-      headers:{Accept:'application/json',...options.headers},signal:controller.signal
-    });
-    if(response.status===401)return {expired:true};
-    if(!response.ok)throw new Error('服务暂不可用');
-    if(!(response.headers.get('content-type')||'').includes('application/json'))throw new Error('接口未连接');
-    return await response.json();
-  }finally{clearTimeout(timer)}
-}
-async function checkSession(){
-  if(ruiyuanAuth.busy||document.hidden)return;
-  ruiyuanAuth.busy=true;retryAuth.hidden=true;
-  lockOffice('正在验证登录状态，请稍候……');
-  try{
-    if(location.protocol!=='https:')throw new Error('请通过已部署的 HTTPS 网站访问');
-    const data=await authRequest('/session');
-    if(data.expired||data.user===null){goLogin();return}
-    if(!data.user||typeof data.user.id!=='string'||typeof data.user.username!=='string'||typeof data.user.must_change_password!=='boolean'||typeof data.csrf_token!=='string'||!data.csrf_token)throw new Error('登录状态无效');
-    if(data.user.must_change_password){goLogin();return}
-    ruiyuanAuth.user=data.user;ruiyuanAuth.csrf=data.csrf_token;
-    document.getElementById('currentUser').textContent=data.user.full_name||data.user.username;
-    render();authScreen.hidden=true;officeApp.hidden=false;
-  }catch(error){
-    lockOffice(location.protocol!=='https:'?'请把文件部署到网站，再通过 HTTPS 网址访问。':'暂时无法验证登录，请检查网络后重试。办公内容尚未开放。');
-    retryAuth.hidden=false;
-  }finally{ruiyuanAuth.busy=false}
-}
-async function logout(){
-  if(ruiyuanAuth.busy||!ruiyuanAuth.user)return;
-  const csrf=ruiyuanAuth.csrf;ruiyuanAuth.busy=true;retryAuth.hidden=true;
-  lockOffice('正在退出登录……');
-  try{
-    const result=await authRequest('/logout',{method:'POST',headers:{'Content-Type':'application/json','X-Ruiyuan-CSRF':csrf},body:'{}'});
-    if(!result.expired&&result.ok!==true)throw new Error('退出未完成');
-    goLogin();
-  }catch(error){
-    authMessage.textContent='退出未完成，请恢复网络后重新验证，再点击退出登录。';retryAuth.hidden=false;
-  }finally{ruiyuanAuth.busy=false}
-}
-document.getElementById('logoutButton').addEventListener('click',logout);
-retryAuth.addEventListener('click',checkSession);
-window.addEventListener('pageshow',checkSession);
-document.addEventListener('visibilitychange',()=>{if(document.hidden)lockOffice('正在验证登录状态，请稍候……');else checkSession()});
-// 从浏览器后退缓存返回时，先保持办公内容隐藏，再重新验证。
-window.addEventListener('pagehide',()=>lockOffice('正在验证登录状态，请稍候……'));
-checkSession();
-</script>
-</body>
-</html>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>瑞渊办公系统</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#f2f6f3;color:#234634;font:16px/1.5 system-ui,"Microsoft YaHei",sans-serif}main{max-width:950px;margin:auto;padding:24px}.card{background:white;padding:25px;border:1px solid #dbe6df;border-radius:12px;margin:20px auto}.auth{max-width:420px;margin:8vh auto}input,select,button{font:inherit;padding:10px;border:1px solid #cbd9ce;border-radius:7px}input{width:100%;margin:6px 0 13px}button{cursor:pointer;background:#19583e;color:white}button.secondary{background:white;color:#19583e}button:disabled{opacity:.5}.hidden{display:none}header{background:#194a35;color:white;padding:20px}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.row>*{flex-shrink:0}table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #e1eae3;text-align:left}section{margin-bottom:20px}.error{color:#a52f2f;min-height:20px}.muted{color:#718579;font-size:13px}h1{font-size:24px}h2{font-size:19px}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.scroll{overflow:auto}@media(max-width:600px){.fields{grid-template-columns:1fr}}</style></head>
+<body><header><strong>瑞渊公司办公系统</strong></header><main>
+<section id="login" class="card auth"><h1>登录办公系统</h1><form id="loginForm"><label>用户名<input id="username" required autocomplete="username" placeholder="例如：李序博"></label><label>密码<input id="password" required type="password" autocomplete="current-password"></label><button>登录</button></form><p class="error" id="loginError"></p></section>
+<section id="change" class="card auth hidden"><h1>修改密码</h1><p class="muted">首次登录必须修改密码；修改后重新登录。</p><form id="changeForm"><label>当前密码<input id="oldPassword" required type="password"></label><label>新密码（8至72字符）<input id="newPassword" required minlength="8" maxlength="72" type="password"></label><label>确认新密码<input id="confirmPassword" required type="password"></label><button>保存新密码</button></form><p class="error" id="changeError"></p><button class="secondary" id="changeLogout">退出</button></section>
+<section id="office" class="hidden"><div class="card"><div class="row"><h1>办公工作台</h1><span id="welcome"></span><button id="logout">退出登录</button><button class="secondary" id="changeOpen">修改密码</button></div><p class="muted">V1.0：登录、账号与权限管理已接入数据库；财务模块后续逐项开发，不展示虚构财务数据。</p></div>
+<div id="adminPanel" class="hidden"><div class="card"><h2>创建员工账号</h2><p class="muted">初始密码统一为 12345678，首次登录必须修改。</p><form id="createForm" class="fields"><label>用户名<input name="username" required></label><label>姓名<input name="full_name" required></label><label>员工编号<input name="employee_no"></label><label>部门<input name="department"></label><label>职位<input name="job_title"></label><label>电话<input name="phone"></label><label>邮箱<input name="email"></label><label>角色<select name="role"><option value="employee">员工</option><option value="finance">财务</option><option value="admin">管理员</option></select></label><button>创建账号</button></form></div>
+<div class="card"><div class="row"><h2>人员账号</h2><button class="secondary" id="refresh">刷新</button></div><div class="scroll"><table><thead><tr><th>姓名</th><th>用户名</th><th>角色</th><th>状态</th><th>首次改密</th><th>操作</th></tr></thead><tbody id="userRows"></tbody></table></div></div></div><p class="error" id="officeError"></p></section>
+</main><script>
+const API='https://api.ruiyuantechnology.com/api/ruiyuan';let user=null,csrf='';const $=id=>document.getElementById(id);
+function view(id){for(const k of ['login','change','office'])$(k).classList.toggle('hidden',k!==id)}
+function error(id,msg){$(id).textContent=msg||''}
+async function call(path,method='GET',payload){const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),15000);try{const headers={Accept:'application/json'};if(method==='POST'){headers['Content-Type']='application/json';if(path!=='login')headers['X-Ruiyuan-CSRF']=csrf}const r=await fetch(API+'/'+path,{method,credentials:'include',cache:'no-store',headers,body:payload===undefined?undefined:JSON.stringify(payload),signal:ctrl.signal});const data=await r.json();if(!r.ok)throw Error(data.error||'请求失败');return data}finally{clearTimeout(timer)}}
+function showUser(){if(!user){view('login');return}if(user.must_change_password){view('change');return}view('office');$('welcome').textContent=user.full_name+'（'+user.role+'）';$('adminPanel').classList.toggle('hidden',user.role!=='admin');if(user.role==='admin')loadUsers()}
+async function refreshSession(){try{const d=await call('session');user=d.user;csrf=d.csrf_token||'';showUser()}catch(e){view('login');error('loginError','登录服务暂不可用：'+e.message)}}
+$('loginForm').onsubmit=async e=>{e.preventDefault();error('loginError','');try{const d=await call('login','POST',{username:$('username').value.trim(),password:$('password').value});user=d.user;csrf=d.csrf_token;$('password').value='';showUser()}catch(err){error('loginError',err.message)}};
+$('changeForm').onsubmit=async e=>{e.preventDefault();if($('newPassword').value!==$('confirmPassword').value){error('changeError','两次新密码不一致');return}try{await call('password','POST',{old_password:$('oldPassword').value,new_password:$('newPassword').value});user=null;csrf='';view('login');error('loginError','修改成功，请使用新密码重新登录')}catch(err){error('changeError',err.message)}};
+async function logout(){try{if(csrf)await call('logout','POST',{})}catch{}user=null;csrf='';view('login')}
+$('logout').onclick=logout;$('changeLogout').onclick=logout;$('changeOpen').onclick=()=>{error('changeError','');view('change')};
+async function loadUsers(){try{const d=await call('users');$('userRows').replaceChildren();for(const u of d.users||[]){const tr=document.createElement('tr');for(const value of [u.full_name,u.username,u.role,u.status,u.must_change_password?'是':'否']){const td=document.createElement('td');td.textContent=value;tr.appendChild(td)}const td=document.createElement('td');for(const [label,path,payload] of [['重置密码','reset-password',{id:u.id}],[(u.status==='active'?'停用':'启用'),'update-user',{id:u.id,status:u.status==='active'?'disabled':'active'}]]){const b=document.createElement('button');b.textContent=label;b.className='secondary';b.disabled=u.id===user.id;b.onclick=async()=>{if(!confirm('确定对 '+u.full_name+' 执行「'+label+'」吗？'))return;try{await call(path,'POST',payload);error('officeError','操作成功');await loadUsers()}catch(e){error('officeError',e.message)}};td.appendChild(b)}tr.appendChild(td);$('userRows').appendChild(tr)}}catch(e){error('officeError',e.message)}}
+$('refresh').onclick=loadUsers;
+$('createForm').onsubmit=async e=>{e.preventDefault();try{const d=Object.fromEntries(new FormData(e.target).entries());await call('create-user','POST',d);e.target.reset();error('officeError','创建成功，初始密码为12345678');await loadUsers()}catch(err){error('officeError',err.message)}};
+refreshSession();
+</script></body></html>
