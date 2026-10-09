@@ -41,7 +41,7 @@ function route(user){
  if(user.role==='admin'){location.replace('/wholemanagement.html');return}
  if(user.role==='sales'){location.replace('/sales.html');return}
  if(user.role==='finance'){location.replace('/finance.html');return}
- if(user.role==='engineer'){location.replace('/engineer.html');return}
+ if(user.role==='employee'){location.replace('/engineer.html');return}
  message('登录成功，但账号尚未分配销售或工程岗位，请联系管理员。',true);
 }
 $('loginForm').addEventListener('submit',async e=>{
