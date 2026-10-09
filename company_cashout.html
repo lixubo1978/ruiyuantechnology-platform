@@ -11,10 +11,33 @@ async function request(path,data){const opt={credentials:'include',cache:'no-sto
 function formData(f){return Object.fromEntries(new FormData(f).entries());}
 function setRows(id,rows){$(id).innerHTML=rows||'<tr><td colspan="9">暂无记录</td></tr>';}
 function nameFor(id){return overview.employees.find(x=>x.id===id)?.name||'—';}
-async function load(){const j=await request('/expenses/overview');overview=j;setRows('directRows',(j.direct||[]).map(x=>`<tr><td>${esc(x.ruiyuan_payment_date)}</td><td>${esc(x.ruiyuan_category)}</td><td>${esc(x.ruiyuan_description)}</td><td>${money(x.ruiyuan_amount)}</td><td>${esc(x.ruiyuan_payer_account)}</td><td>${esc(x.ruiyuan_payee_name)}</td><td>${esc(x.ruiyuan_bank_reference)}</td></tr>`).join(''));setRows('procRows',(j.procurements||[]).map(x=>`<tr><td>${esc(x.ruiyuan_contract_no)}</td><td>${esc(x.ruiyuan_supplier)}</td><td>${esc(x.ruiyuan_title)}</td><td>${money(x.ruiyuan_amount)}</td><td>${esc(x.ruiyuan_signed_on)}</td></tr>`).join(''));$('employeeSelect').innerHTML=(j.employees||[]).map(x=>`<option value="${esc(x.id)}">${esc(x.name)}（${esc(x.role)}）</option>`).join('');setRows('monthRows',(j.monthly||[]).map(x=>`<tr><td>${esc(x.ruiyuan_month)}</td><td>${esc(nameFor(x.ruiyuan_employee_id))}</td><td>${money(x.ruiyuan_salary)}</td><td>${money(x.ruiyuan_reimbursement)}</td><td>${money(Number(x.ruiyuan_salary)+Number(x.ruiyuan_reimbursement))}</td><td>${esc(x.ruiyuan_status)}</td><td>${x.ruiyuan_status==='approved'?`<button data-post="${esc(x.ruiyuan_id)}">生成一条支出记录</button>`:'已入账'}</td></tr>`).join(''));}
+async function load(){const j=await request('/expenses/overview');overview=j;setRows('directRows',(j.direct||[]).map(x=>`<tr><td>${esc(x.ruiyuan_payment_date)}</td><td>${esc(x.ruiyuan_category)}</td><td>${esc(x.ruiyuan_description)}</td><td>${money(x.ruiyuan_amount)}</td><td>${esc(x.ruiyuan_payer_account)}</td><td>${esc(x.ruiyuan_payee_name)}</td><td>${esc(x.ruiyuan_bank_reference)}</td></tr>`).join(''));setRows('procRows',(j.procurements||[]).map(x=>`<tr><td>${esc(x.ruiyuan_contract_no)}</td><td>${esc(x.ruiyuan_supplier)}</td><td>${esc(x.ruiyuan_title)}</td><td>${money(x.ruiyuan_amount)}</td><td>${esc(x.ruiyuan_signed_on)}</td></tr>`).join(''));$('employeeSelect').innerHTML=(j.employees||[]).map(x=>`<option value="${esc(x.id)}">${esc(x.name)}（${esc(x.role)}）</option>`).join('');setRows('monthRows',(j.monthly||[]).map(x=>`<tr><td>${esc(x.ruiyuan_month)}</td><td>${esc(nameFor(x.ruiyuan_employee_id))}</td><td>${money(x.ruiyuan_salary)}</td><td>${money(x.ruiyuan_reimbursement)}</td><td>${money(Number(x.ruiyuan_salary)+Number(x.ruiyuan_reimbursement))}</td><td>${esc(x.ruiyuan_status)}</td><td>${x.ruiyuan_status==='approved'&&Number(x.ruiyuan_salary)+Number(x.ruiyuan_reimbursement)>0?`<button data-post="${esc(x.ruiyuan_id)}">生成一条支出记录</button>`:'已入账'}</td></tr>`).join(''));}
 async function submit(e,path){e.preventDefault();err('');try{await request(path,formData(e.target));e.target.reset();await load();}catch(x){err(x.message);}}
-$('directForm').onsubmit=e=>submit(e,'/expenses/direct/save');$('procForm').onsubmit=e=>submit(e,'/expenses/procurement/save');$('monthForm').onsubmit=async e=>{e.preventDefault();try{const d=formData(e.target);d.month+='-01';await request('/expenses/month/approve',d);await load();}catch(x){err(x.message);}};
-$('monthRows').onclick=async e=>{const b=e.target.closest('[data-post]');if(!b)return;if(!confirm('确定生成该员工本月唯一一条公司支出记录？'))return;try{await request('/expenses/month/post',{id:b.dataset.post});await load();}catch(x){err(x.message);}};
+$('directForm').onsubmit=e=>submit(e,'/expenses/direct/save');$('procForm').onsubmit=e=>submit(e,'/expenses/procurement/save');$('monthForm').onsubmit=async e=>{e.preventDefault();err('');try{
+ const d=formData(e.target);
+ if(!d.employee_id||!/^\d{4}-\d{2}$/.test(d.month||''))throw Error('请选择员工及月份');
+ const nowMonth=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit'}).format(new Date());
+ if(d.month>nowMonth)throw Error('禁止生成未来月份的结算记录');
+ const salary=Number(d.salary);if(!Number.isFinite(salary)||salary<0)throw Error('工资金额无效');
+ const check=await request('/monthly/preview',{employee_id:d.employee_id,month:d.month+'-01'});
+ if(Number(check.pending_count||0)>0)throw Error('该月仍有未审批报销');
+ const total=salary+Number(check.approved_reimbursement||0);
+ if(!(total>0))throw Error('工资和已批准报销合计必须大于0');
+ if(!confirm('确认审批本月结算？合计：'+money(total)))return;
+ d.month+='-01';await request('/expenses/month/approve',d);await load();
+ }catch(x){err(x.message);}};
+$('monthRows').onclick=async e=>{const b=e.target.closest('[data-post]');if(!b)return;err('');try{
+ const p=(overview.monthly||[]).find(x=>x.ruiyuan_id===b.dataset.post);if(!p)throw Error('记录不存在，请刷新');
+ const mon=String(p.ruiyuan_month||'').slice(0,7);
+ const nowMonth=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit'}).format(new Date());
+ if(mon>nowMonth)throw Error('未来月份不能生成公司支出');
+ const total=Number(p.ruiyuan_salary||0)+Number(p.ruiyuan_reimbursement||0);
+ if(!(total>0))throw Error('零元记录不能生成公司支出');
+ const check=await request('/monthly/preview',{employee_id:p.ruiyuan_employee_id,month:mon+'-01'});
+ if(Number(check.pending_count||0)>0)throw Error('仍有未审批报销，不能入账');
+ if(!confirm('确认生成本月唯一公司支出：'+money(total)+'？'))return;
+ await request('/expenses/month/post',{id:b.dataset.post});await load();
+ }catch(x){err(x.message);}};
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-tab]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('main section').forEach(x=>x.hidden=x.id!==b.dataset.tab);});
 let verifying=false;
 async function verify(){
