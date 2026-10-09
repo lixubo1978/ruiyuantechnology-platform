@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>瑞渊办公｜管理总工作台</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f7f4;color:#244031;font-family:system-ui,-apple-system,"Microsoft YaHei",sans-serif}header{background:#174b39;color:white;padding:20px 5%}.top{max-width:1200px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.brand{font-size:24px;font-weight:800}.brand small{display:block;font-size:11px;font-weight:400;letter-spacing:2px;color:#c9dfd0}.actions{display:flex;align-items:center;gap:14px}.actions a,.actions button{background:transparent;color:white;border:1px solid #ffffff88;border-radius:7px;padding:8px 13px;text-decoration:none;cursor:pointer}main{max-width:1200px;margin:38px auto;padding:0 20px}h1{font-size:30px;margin:0 0 8px}p{color:#74877a;line-height:1.7}.notice{background:white;border:1px solid #e1e9e3;border-radius:12px;padding:18px 22px;margin:24px 0 26px}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}.card{background:white;border:1px solid #e1e9e3;border-radius:12px;padding:26px 22px;min-height:215px;display:flex;flex-direction:column;box-shadow:0 5px 18px #16432c0b;text-decoration:none;color:inherit;transition:transform .2s}.card:hover{transform:translateY(-4px);border-color:#9ac6aa}.icon{display:grid;place-items:center;width:48px;height:48px;border-radius:12px;background:#e5f2e9;color:#174b39;font-size:24px;font-weight:800}.card h2{font-size:19px;color:#174b39;margin:17px 0 5px}.card p{font-size:13px;flex:1;margin:0}.status{font-size:12px;color:#708d78;margin-top:14px}.foot{font-size:12px;color:#84978a;margin:35px 0}#gate{min-height:65vh;display:grid;place-items:center;padding:20px}#gate .box{background:white;border:1px solid #dce8df;border-radius:13px;padding:30px;max-width:460px;text-align:center}#gate a,#retry{display:inline-block;padding:9px 16px;margin:8px;background:#174b39;color:white;border:0;border-radius:7px;text-decoration:none;cursor:pointer}#app[hidden],#gate[hidden]{display:none}#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#153d2e;color:white;border-radius:8px;padding:12px 20px;display:none;max-width:90vw}@media(max-width:1000px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:580px){.cards{grid-template-columns:1fr}h1{font-size:25px}.top{align-items:flex-start}.card{min-height:175px}}
+</style>
+</head>
+<body>
+<section id="gate"><div class="box"><h2>瑞渊办公系统</h2><p id="gateMessage">正在验证管理员身份……</p><a href="/login.html">返回登录</a><button id="retry">重新验证</button></div></section>
+<div id="app" hidden>
+<header><div class="top"><div class="brand">瑞渊办公<small>RUIYUAN · MANAGEMENT</small></div><div class="actions"><span id="username"></span><a href="/">公司官网</a><button id="logout">退出登录</button></div></div></header>
+<main><h1>公司管理总工作台</h1><p>统一管理人员、合同、公司资金、财务、物资和经营事务。</p>
+<div class="notice">以下为八个管理模块的入口框架，后续逐项开发。当前不展示模拟业务金额，也不会修改数据库。</div>
+<div class="cards" id="cards">
+<a class="card" href="personnel_authorization.html"><div class="icon">人</div><h2>人员授权</h2><p>管理员工账号、身份岗位、授权范围及人员状态。</p><div class="status">待开发 · 点击查看提示 →</div></a>
+<a class="card" href="contracts.html"><div class="icon">约</div><h2>合同管理</h2><p>管理合同登记、签署、执行、附件与归档。</p><div class="status">待开发 · 点击查看提示 →</div></a>
+<a class="card" href="company_cashflow.html"><div class="icon">账</div><h2>公司流水</h2><p>登记与查询公司收入、支出及资金往来。</p><div class="status">待开发 · 点击查看提示 →</div></a>
+<a class="card" href="monthly_reimbursements.html"><div class="icon">月</div><h2>每月报销管理</h2><p>按月份查看报销申请、凭证、审批与付款。</p><div class="status">待开发 · 点击查看提示 →</div></a>
+<a class="card" href="financial_management.html"><div class="icon">财</div><h2>财务管理</h2><p>管理应收应付、发票、回款及财务统计。</p><div class="status">待开发 · 点击查看提示 →</div></a>
+<a class="card" href="inventory.html"><div class="icon">物</div><h2>物资库记录管理</h2><p>管理物资入库、出库、领用、库存与盘点。</p><div class="status">待开发 · 点击查看提示 →</div></a>
+<a class="card" href="sales_management.html"><div class="icon">销</div><h2>销售人员管理</h2><p>管理销售人员、业务归属、跟进和工作记录。</p><div class="status">待开发 · 点击查看提示 →</div></a>
+<a class="card" href="payroll_reimbursements.html"><div class="icon">薪</div><h2>工资及报销管理</h2><p>管理员工工资、报销结算和付款记录。</p><div class="status">待开发 · 点击查看提示 →</div></a>
+</div><div class="foot">瑞渊公司办公系统 · 所有业务数据将通过独立 Cloudflare API 访问</div></main>
+</div><div id="toast" role="status"></div>
+<script>
+'use strict';
+const API='https://api.ruiyuantechnology.com/api/ruiyuan';let csrf='';
+const gate=document.getElementById('gate'),app=document.getElementById('app'),msg=document.getElementById('gateMessage');
+async function api(path,options={}){const c=new AbortController(),t=setTimeout(()=>c.abort(),15000);try{const r=await fetch(API+path,{...options,credentials:'include',cache:'no-store',headers:{Accept:'application/json',...options.headers},signal:c.signal});const d=await r.json();if(!r.ok)throw Error(d.error||'接口不可用');return d}finally{clearTimeout(t)}}
+async function verify(){gate.hidden=false;app.hidden=true;msg.textContent='正在验证管理员身份……';try{const d=await api('/session');if(!d.user){msg.textContent='请先登录';return}if(d.user.must_change_password){msg.textContent='请先在登录页面修改初始密码';return}if(d.user.role!=='admin'){msg.textContent='当前账号不是管理员，无权访问此页面';return}csrf=d.csrf_token||'';document.getElementById('username').textContent=d.user.full_name||d.user.username;gate.hidden=true;app.hidden=false}catch(e){msg.textContent='身份验证失败：'+e.message}}
+function notice(t){const e=document.getElementById('toast');e.textContent=t;e.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>e.style.display='none',3000)}
+document.getElementById('cards').addEventListener('click',e=>{const card=e.target.closest('.card');if(card){e.preventDefault();notice('「'+card.querySelector('h2').textContent+'」模块尚未开发')}});
+document.getElementById('retry').onclick=verify;
+document.getElementById('logout').onclick=async()=>{try{await api('/logout',{method:'POST',headers:{'Content-Type':'application/json','X-Ruiyuan-CSRF':csrf},body:'{}'});location.replace('/login.html')}catch(e){notice('退出失败：'+e.message)}};
+window.addEventListener('pageshow',verify);
+</script>
+</body>
+</html>
