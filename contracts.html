@@ -1,0 +1,144 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>瑞渊办公 · 合同管理</title><style>
+*{box-sizing:border-box}body{margin:0;background:#f3f7f4;color:#234032;font:14px/1.6 system-ui,"Microsoft YaHei",sans-serif}header{background:#174b39;color:white;padding:18px 5%;display:flex;justify-content:space-between;align-items:center}header a{color:white}main{max-width:1300px;margin:26px auto;padding:0 20px}.panel{background:white;border:1px solid #dce7df;border-radius:12px;padding:20px;margin:16px 0}h1{margin:0}h2{font-size:20px}h3{font-size:17px}.muted{color:#788b7f}button{background:white;color:#174b39;border:1px solid #bed0c3;border-radius:7px;padding:9px 14px;cursor:pointer}button.primary{background:#174b39;color:white}button:disabled{opacity:.5}input,select,textarea{width:100%;padding:9px;border:1px solid #cbdacf;border-radius:7px;font:inherit}textarea{min-height:65px}label{display:block;font-size:13px}label span{display:block;margin-bottom:4px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stats strong{display:block;font-size:22px;color:#174b39}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.toolbar input{max-width:340px}.filters{display:flex;gap:12px;align-items:end;flex-wrap:wrap;padding:14px 0}.filters label{min-width:155px}.filters select{min-width:155px}.invoice-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:12px 0}.invoice-fields input{width:100%}.invoice-file{background:#f3f7f4;padding:12px;border-radius:8px}.invoice-file small{display:block;color:#788b7f}.img-preview{max-width:100%;max-height:75vh;object-fit:contain}.scroll{overflow:auto}table{width:100%;border-collapse:collapse;white-space:nowrap}td,th{padding:11px;border-bottom:1px solid #edf1ee;text-align:left}th{background:#f8faf9}.right{text-align:right}.message{color:#a03930;white-space:pre-wrap}.dialog{width:min(1080px,96vw);max-height:92vh;overflow:auto;border:0;border-radius:12px;padding:24px}.dialog::backdrop{background:#12382999}.line{display:grid;grid-template-columns:2fr 1fr .7fr .7fr 1fr .7fr auto;gap:7px;margin:8px 0}.line input{min-width:0}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.tabs .on{background:#174b39;color:white}.section{border-top:1px solid #dce7df;margin-top:18px;padding-top:15px}.actions{display:flex;gap:8px;flex-wrap:wrap}.hide,[hidden]{display:none!important}@media(max-width:760px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}.line{grid-template-columns:1fr 1fr}.line input:first-child{grid-column:1/-1}}@media print{header,main,.noprint,.dialog>button{display:none!important}body{background:white}.dialog{position:static;width:100%;max-height:none;overflow:visible}#view{display:block!important}#eventModal,#createModal{display:none!important}}
+</style></head><body>
+<header><strong>瑞渊办公 · 合同管理</strong><a href="/wholemanagement.html">返回管理总工作台 →</a></header><main><div class="toolbar"><div><h1>合同管理</h1><div class="muted">合同台账 · 分期开票 · 分期回款 · 尾款 · 履约保证金</div></div><div class="actions"><span id="who"></span><button onclick="refresh()">刷新</button><button class="primary" id="newBtn" onclick="newContract()">＋ 新建合同</button></div></div><p id="error" class="message"></p><div class="stats"><div class="panel">合同数量<strong id="sCount">—</strong></div><div class="panel">合同总额<strong id="sTotal">—</strong></div><div class="panel">累计开票<strong id="sInvoice">—</strong></div><div class="panel">累计回款<strong id="sReceipt">—</strong></div></div><div class="panel"><div class="toolbar"><h2>合同台账</h2><input id="query" placeholder="搜索合同编号、名称、甲方、签署人员" oninput="render()"></div><div class="filters">
+<label>年度<select id="yearFilter" onchange="render()"><option value="">全部年度</option></select></label>
+<label>签署人<select id="signerFilter" onchange="render()"><option value="">全部签署人</option></select></label>
+<label>回款状态<select id="paymentFilter" onchange="render()"><option value="">全部状态</option><option value="paid">已完成回款</option><option value="unpaid">未完成回款</option></select></label>
+<button onclick="clearFilters()">清除筛选</button><span class="muted" id="filterCount"></span>
+</div><div class="scroll"><table><thead><tr><th>合同编号</th><th>合同名称</th><th>甲方</th><th>签署人员</th><th>状态</th><th>合同金额</th><th>已开票</th><th>已回款</th><th>未回款</th><th>操作</th></tr></thead><tbody id="list"></tbody></table></div></div></main>
+<dialog id="createModal" class="dialog"><div class="toolbar"><h2>创建合同</h2><button onclick="createModal.close()">关闭 ×</button></div><p id="createError" class="message"></p><form id="form" onsubmit="saveContract(event)"><div class="grid"><label><span>合同编号 *</span><input name="contract_no" required></label><label><span>合同名称 *</span><input name="title" required></label><label><span>合同状态</span><select name="contract_status"><option value="draft">草稿</option><option value="pending">待签署</option><option value="active">执行中</option><option value="completed">已完成</option><option value="terminated">已终止</option></select></label><label><span>甲方公司 *</span><input name="party_a" required></label><label><span>乙方公司 *</span><input name="party_b" required></label><label><span>合同签署人员（销售/管理员）</span><select name="sales_user_id" id="salesSelect"></select></label><label><span>签署日期</span><input type="date" name="signed_on"></label><label><span>生效日期</span><input type="date" name="effective_on"></label><label><span>到期日期</span><input type="date" name="expires_on"></label><label><span>价格口径</span><select name="tax_mode"><option value="inclusive">含税</option><option value="exclusive">未税</option></select></label><label><span>履约保证金（允许0）</span><input type="number" name="deposit_required" min="0" step=".01" value="0"></label><label><span>保证金缴纳方</span><select name="deposit_payer"><option value="us">瑞渊缴纳</option><option value="customer">客户缴纳</option></select></label><label><span>外部合同编号</span><input name="external_no"></label><label><span>甲方联系人</span><input name="party_a_contact"></label><label><span>甲方电话</span><input name="party_a_phone"></label><label><span>乙方联系人</span><input name="party_b_contact"></label><label><span>乙方电话</span><input name="party_b_phone"></label><label><span>付款条件（预付款/尾款等）</span><input name="payment_terms"></label><label style="grid-column:1/-1"><span>交付地点、质保、备注</span><textarea name="remarks"></textarea></label></div><div class="section"><div class="toolbar"><h3>合同明细（手工逐条输入）</h3><button type="button" onclick="addLine()">＋ 新增明细</button></div><div id="lines"></div><p class="right">合同金额合计：<strong id="lineTotal">¥0.00</strong></p></div><div class="right"><button class="primary">保存合同</button></div></form></dialog>
+<dialog id="view" class="dialog"><div class="toolbar noprint"><h2>合同详情</h2><div class="actions"><button onclick="window.print()">打印</button><button onclick="view.close()">关闭 ×</button></div></div><div id="summary"></div><div id="tabs" class="tabs noprint"></div><div id="tabContent"></div></dialog>
+<dialog id="eventModal" class="dialog" style="width:min(560px,96vw)"><div class="toolbar"><h2 id="eventTitle">新增记录</h2><button onclick="eventModal.close()">关闭 ×</button></div><p id="eventError" class="message"></p><form id="eventForm" onsubmit="saveEvent(event)"><input type="hidden" name="event_type"><label><span>日期</span><input type="date" name="event_on" required></label><label id="eventAmountBlock"><span>金额（元）</span><input type="number" name="amount" min="0" step=".01" value="0" required></label><label><span>期次 / 事项名称</span><input name="title" placeholder="预付款、进度款、尾款、履约节点"></label><label><span>发票号 / 银行流水 / 凭证编号</span><input name="reference_no"></label><div id="invoiceFields" hidden><div class="invoice-fields">
+<label><span>本次发票金额（元）</span><input id="invoiceAmount" type="number" min="0.01" step=".01" oninput="syncInvoiceAmount()"></label>
+<label><span>发票税率（%）</span><input name="invoice_tax_rate" type="number" min="0" max="100" step="0.01" value="0"></label></div>
+<label class="invoice-file"><span>上传发票图片（可选）</span><input id="invoiceFile" type="file" accept="image/jpeg,image/png,image/webp" onchange="showFileHint()"><small id="fileHint">自动压缩为 WebP，尽量控制在 700KB 以内；私有 Storage 保存</small></label></div>
+<label><span>备注</span><textarea name="notes"></textarea></label><div class="right"><button class="primary" id="saveEventBtn">保存记录</button></div></form></dialog>
+<input id="reuploadFile" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+<dialog id="invoicePreview" class="dialog" style="width:min(900px,95vw)"><div class="toolbar"><h2>发票图片</h2><button onclick="invoicePreview.close()">关闭 ×</button></div><div style="text-align:center"><img id="invoicePreviewImg" class="img-preview" alt="发票图片"></div></dialog>
+<script>
+'use strict';
+const BASE='https://api.ruiyuantechnology.com/api/ruiyuan', $=id=>document.getElementById(id);
+let csrf='',user=null,contracts=[],sales=[],selected=null,tab='items',pendingInvoiceEvent=null,invoiceObjectUrl='';
+const cash=n=>'¥'+Number(n||0).toLocaleString('zh-CN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const safe=v=>String(v??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
+async function call(path,data){const c=new AbortController(),t=setTimeout(()=>c.abort(),16000);try{const r=await fetch(BASE+path,{method:data===undefined?'GET':'POST',credentials:'include',cache:'no-store',headers:{Accept:'application/json',...(data===undefined?{}:{'Content-Type':'application/json','X-Ruiyuan-CSRF':csrf})},...(data===undefined?{}:{body:JSON.stringify(data)}),signal:c.signal});const d=await r.json();if(!r.ok)throw Error(d.error||'接口失败');return d}finally{clearTimeout(t)}}
+async function init(){try{const a=await call('/session');if(!a.user)throw Error('请先登录');if(!['admin','sales','finance'].includes(a.user.role))throw Error('没有合同管理权限');user=a.user;csrf=a.csrf_token||'';$('who').textContent=user.full_name;$('newBtn').hidden=user.role==='finance';await refresh()}catch(e){$('error').textContent=e.message}}
+async function refresh(){try{const [a,b]=await Promise.all([call('/contracts'),call('/contracts/sales-users')]);contracts=a.contracts||[];sales=b.users||[];refreshFilters();render();$('error').textContent=''}catch(e){$('error').textContent=e.message}}
+function refreshFilters(){
+ const y=$('yearFilter'),signer=$('signerFilter'),prevY=y.value,prevS=signer.value;
+ const years=[...new Set(contracts.map(c=>String(c.signed_on||c.created_at||'').slice(0,4)).filter(v=>/^\d{4}$/.test(v)))].sort().reverse();
+ y.innerHTML='<option value="">全部年度</option>'+years.map(v=>`<option value="${v}">${v}年</option>`).join('');
+ y.value=years.includes(prevY)?prevY:'';
+ const options=new Map();
+ contracts.forEach(c=>{if(c.sales_user_id)options.set(c.sales_user_id,c.sales_name_snapshot||'未命名')});
+ sales.forEach(c=>options.set(c.id,c.full_name));
+ signer.innerHTML='<option value="">全部签署人</option>'+[...options].sort((a,b)=>a[1].localeCompare(b[1],'zh-CN')).map(([id,name])=>`<option value="${safe(id)}">${safe(name)}</option>`).join('');
+ signer.value=options.has(prevS)?prevS:'';
+}
+function clearFilters(){$('yearFilter').value='';$('signerFilter').value='';$('paymentFilter').value='';$('query').value='';render()}
+function render(){
+ const q=$('query').value.trim().toLowerCase(),year=$('yearFilter').value,signer=$('signerFilter').value,payment=$('paymentFilter').value;
+ const arr=contracts.filter(x=>{
+  const total=Number(x.total||0),received=Number(x.received||0);
+  const paid=total>0&&received>=total-0.005;
+  const contractYear=String(x.signed_on||x.created_at||'').slice(0,4);
+  return (!year||year===contractYear)&&(!signer||signer===x.sales_user_id)&&
+   (!payment||(payment==='paid'?paid:!paid))&&
+   [x.contract_no,x.title,x.party_a,x.sales_name_snapshot].some(v=>String(v||'').toLowerCase().includes(q));
+ });
+ $('filterCount').textContent=`筛选结果：${arr.length} 份合同`;
+ $('sCount').textContent=arr.length;
+ $('sTotal').textContent=cash(arr.reduce((a,c)=>a+Number(c.total||0),0));
+ $('sInvoice').textContent=cash(arr.reduce((a,c)=>a+Number(c.invoiced||0),0));
+ $('sReceipt').textContent=cash(arr.reduce((a,c)=>a+Number(c.received||0),0));
+ $('list').innerHTML=arr.length?arr.map(c=>`<tr><td>${safe(c.contract_no)}</td><td>${safe(c.title)}</td><td>${safe(c.party_a)}</td><td>${safe(c.sales_name_snapshot)}</td><td>${safe(c.status)}</td><td>${cash(c.total)}</td><td>${cash(c.invoiced)}</td><td>${cash(c.received)}</td><td>${cash(Number(c.total)-Number(c.received))}</td><td><button data-id="${safe(c.id)}">查看</button></td></tr>`).join(''):'<tr><td colspan="10">没有符合筛选条件的合同</td></tr>';
+ $('list').querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>openDetail(b.dataset.id));
+}
+function addLine(x={}){const row=document.createElement('div');row.className='line';row.innerHTML=`<input data-k="description" placeholder="产品/服务内容" value="${safe(x.description||'')}"><input data-k="specification" placeholder="规格型号" value="${safe(x.specification||'')}"><input data-k="unit" placeholder="单位" value="${safe(x.unit||'项')}"><input data-k="quantity" type="number" min="0.0001" step="any" value="${safe(x.quantity||1)}"><input data-k="unit_price" type="number" min="0" step="any" value="${safe(x.unit_price??0)}"><input data-k="tax_rate" type="number" min="0" max="100" step="any" value="${safe(x.tax_rate||0)}"><button type="button">删除</button>`;row.querySelector('button').onclick=()=>{row.remove();recalc()};row.querySelectorAll('input').forEach(i=>i.oninput=recalc);$('lines').append(row);recalc()}
+function items(){return [...$('lines').children].map(r=>Object.fromEntries([...r.querySelectorAll('[data-k]')].map(i=>[i.dataset.k,i.value])))}
+function recalc(){$('lineTotal').textContent=cash(items().reduce((a,x)=>a+Number(x.quantity||0)*Number(x.unit_price||0),0))}
+function newContract(){$('form').reset();$('lines').replaceChildren();$('createError').textContent='';$('salesSelect').innerHTML='<option value="">未指定</option>'+sales.map(x=>`<option value="${safe(x.id)}">${safe(x.full_name)}</option>`).join('');addLine();$('createModal').showModal()}
+async function saveContract(e){e.preventDefault();const f=e.target,p=Object.fromEntries(new FormData(f));p.items=items();p.details={external_no:p.external_no,party_a_contact:p.party_a_contact,party_a_phone:p.party_a_phone,party_b_contact:p.party_b_contact,party_b_phone:p.party_b_phone,payment_terms:p.payment_terms,remarks:p.remarks};if(p.items.some(x=>!x.description.trim()||!(Number(x.quantity)>0)||Number(x.unit_price)<0)){ $('createError').textContent='明细内容、数量或单价不正确';return}try{await call('/contracts/create',p);$('createModal').close();await refresh()}catch(err){$('createError').textContent=err.message}}
+async function openDetail(id){try{selected=await call('/contracts/detail',{id});tab='items';drawDetail();$('view').showModal()}catch(e){$('error').textContent=e.message}}
+function drawDetail(){const c=selected.contract;const unpaid=Number(selected.total)-Number(selected.received);const balance=Number(selected.deposit_paid)-Number(selected.deposit_returned)-Number(selected.deposit_deducted);$('summary').innerHTML=`<h2>${safe(c.title)}</h2><p>合同编号：${safe(c.contract_no)}　签署人员：${safe(c.sales_name_snapshot)}　状态：${safe(c.status)}</p><p>甲方：${safe(c.party_a)}　乙方：${safe(c.party_b)}</p><p>合同金额：<b>${cash(selected.total)}</b>　已开票：${cash(selected.invoiced)}　已回款：${cash(selected.received)}　未回款：${cash(unpaid)}</p><p>履约保证金约定：${cash(c.deposit_required)}　已缴：${cash(selected.deposit_paid)}　已退：${cash(selected.deposit_returned)}　扣除：${cash(selected.deposit_deducted)}　未结清：${cash(balance)}</p><p>付款条件：${safe(c.details?.payment_terms||'')}　备注：${safe(c.details?.remarks||'')}</p>`;
+const opts=[['items','合同明细'],['invoice','分期开票'],['receipt','分期回款'],['deposit','履约保证金'],['milestone','付款节点'],['fulfillment','履约记录']];$('tabs').innerHTML=opts.map(([k,v])=>`<button class="${tab===k?'on':''}" data-tab="${k}">${v}</button>`).join('');$('tabs').querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;drawDetail()});
+if(tab==='items'){$('tabContent').innerHTML=`<div class="scroll"><table><thead><tr><th>内容</th><th>规格</th><th>单位</th><th>数量</th><th>单价</th><th>税率</th><th>金额</th></tr></thead><tbody>${selected.items.map(i=>`<tr><td>${safe(i.description)}</td><td>${safe(i.specification)}</td><td>${safe(i.unit)}</td><td>${safe(i.quantity)}</td><td>${cash(i.unit_price)}</td><td>${safe(i.tax_rate)}%</td><td>${cash(Number(i.quantity)*Number(i.unit_price))}</td></tr>`).join('')}</tbody></table></div>`;return}
+const types=tab==='deposit'?['deposit_paid','deposit_returned','deposit_deducted']: [tab];const rows=selected.events.filter(x=>types.includes(x.event_type));const buttons=tab==='deposit'?[['deposit_paid','登记缴纳'],['deposit_returned','登记退还'],['deposit_deducted','登记扣除']]:[[tab,tab==='invoice'?'登记开票':tab==='receipt'?'登记回款':tab==='milestone'?'增加付款节点':'增加履约记录']];$('tabContent').innerHTML=`<div class="actions noprint">${buttons.map(([t,n])=>`<button data-event="${t}">${n}</button>`).join('')}</div><div class="scroll"><table><thead><tr><th>日期</th><th>类型</th><th>期次/事项</th><th>金额</th><th>发票/流水号</th><th>税率</th><th>图片</th><th>备注</th></tr></thead><tbody>${rows.map(e=>`<tr><td>${safe(e.event_on)}</td><td>${safe(e.event_type)}</td><td>${safe(e.title)}</td><td>${cash(e.amount)}</td><td>${safe(e.reference_no)}</td><td>${e.event_type==='invoice'?safe(e.invoice_tax_rate)+'%':'—'}</td><td>${e.event_type==='invoice'?(e.invoice_image_path?`<button data-view-invoice="${safe(e.id)}">查看图片</button>`:(user.role==='admin'||user.role==='finance'?`<button data-upload-invoice="${safe(e.id)}">上传图片</button>`:'未上传')):'—'}</td><td>${safe(e.notes)}</td></tr>`).join('')||'<tr><td colspan="8">暂无记录</td></tr>'}</tbody></table></div>`;$('tabContent').querySelectorAll('[data-event]').forEach(b=>b.onclick=()=>openEvent(b.dataset.event));$('tabContent').querySelectorAll('[data-view-invoice]').forEach(b=>b.onclick=()=>viewInvoice(b.dataset.viewInvoice));$('tabContent').querySelectorAll('[data-upload-invoice]').forEach(b=>b.onclick=()=>retryInvoice(b.dataset.uploadInvoice));}
+function openEvent(type){
+ if(user.role==='sales'&&!['milestone','fulfillment'].includes(type)){alert('财务记录仅管理员或财务人员可登记');return}
+ $('eventForm').reset();$('eventForm').elements.event_type.value=type;
+ $('eventForm').elements.event_on.value=new Date().toLocaleDateString('en-CA');
+ $('eventTitle').textContent='新增 '+({invoice:'开票记录',receipt:'回款记录',milestone:'付款节点',fulfillment:'履约记录'}[type]||type);
+ $('eventError').textContent='';$('invoiceFields').hidden=type!=='invoice';$('eventAmountBlock').hidden=type==='invoice';
+ $('invoiceFile').value='';$('fileHint').textContent='自动压缩为 WebP，尽量控制在 700KB 以内；私有 Storage 保存';
+ $('invoiceAmount').value='';$('eventForm').elements.amount.readOnly=type==='invoice';
+ $('eventForm').elements.amount.required=type!=='invoice';
+ $('eventModal').showModal();
+}
+function syncInvoiceAmount(){if($('eventForm').elements.event_type.value==='invoice')$('eventForm').elements.amount.value=$('invoiceAmount').value}
+function showFileHint(){const f=$('invoiceFile').files[0];$('fileHint').textContent=f?`已选择：${f.name}（${(f.size/1024).toFixed(0)} KB，保存时自动压缩）`:'未选择图片'}
+async function compressInvoice(file){
+ if(!file||!['image/jpeg','image/png','image/webp'].includes(file.type))throw Error('请选择 JPG、PNG 或 WebP 发票图片');
+ const bitmap=await createImageBitmap(file);
+ try{
+  let scale=Math.min(1,1600/Math.max(bitmap.width,bitmap.height));
+  for(let attempt=0;attempt<7;attempt++){
+   const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));
+   const ctx=canvas.getContext('2d');if(!ctx)throw Error('浏览器不支持图片处理');
+   ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);
+   const quality=Math.max(.48,.78-attempt*.05);
+   const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',quality));
+   if(!blob||blob.type!=='image/webp')throw Error('浏览器不支持 WebP 图片压缩');
+   if(blob.size<=700*1024)return blob;
+   scale*=.8;
+  }
+  throw Error('图片压缩后仍超过700KB，请选择更清晰简洁的原图或裁剪后上传');
+ }finally{bitmap.close?.()}
+}
+async function uploadInvoiceImage(contractId,eventId,file){
+ const blob=await compressInvoice(file);
+ const url=BASE+'/contracts/invoice-image?id='+encodeURIComponent(contractId)+'&event_id='+encodeURIComponent(eventId);
+ const res=await fetch(url,{method:'POST',credentials:'include',cache:'no-store',headers:{'Content-Type':'image/webp','X-Ruiyuan-CSRF':csrf},body:blob});
+ const data=await res.json();if(!res.ok)throw Error(data.error||'发票图片上传失败');
+}
+async function viewInvoice(eventId){
+ try{
+  const url=BASE+'/contracts/invoice-image?id='+encodeURIComponent(selected.contract.id)+'&event_id='+encodeURIComponent(eventId);
+  const res=await fetch(url,{credentials:'include',cache:'no-store'});
+  if(!res.ok){const d=await res.json();throw Error(d.error||'图片读取失败')}
+  const blob=await res.blob();if(blob.type!=='image/webp')throw Error('图片响应格式错误');
+  if(invoiceObjectUrl)URL.revokeObjectURL(invoiceObjectUrl);
+  invoiceObjectUrl=URL.createObjectURL(blob);$('invoicePreviewImg').src=invoiceObjectUrl;$('invoicePreview').showModal();
+ }catch(err){$('error').textContent=err.message}
+}
+function retryInvoice(eventId){
+ pendingInvoiceEvent=eventId;$('reuploadFile').value='';$('reuploadFile').click();
+}
+$('reuploadFile').onchange=async e=>{
+ const file=e.target.files[0];if(!file||!pendingInvoiceEvent)return;
+ const eventId=pendingInvoiceEvent;pendingInvoiceEvent=null;
+ try{await uploadInvoiceImage(selected.contract.id,eventId,file);selected=await call('/contracts/detail',{id:selected.contract.id});drawDetail();$('error').textContent=''}
+ catch(err){$('error').textContent='图片上传失败：'+err.message}
+};
+$('invoicePreview').addEventListener('close',()=>{if(invoiceObjectUrl)URL.revokeObjectURL(invoiceObjectUrl);invoiceObjectUrl='';$('invoicePreviewImg').removeAttribute('src')});
+async function saveEvent(e){
+ e.preventDefault();const p=Object.fromEntries(new FormData(e.target));p.id=selected.contract.id;
+ const file=p.event_type==='invoice' ? $('invoiceFile').files[0] : null;
+ if(p.event_type==='invoice'){
+  p.amount=$('invoiceAmount').value;
+  if(!(Number(p.amount)>0)){$('eventError').textContent='请填写本次发票金额';return}
+  if(!(Number(p.invoice_tax_rate)>=0&&Number(p.invoice_tax_rate)<=100)){$('eventError').textContent='发票税率应在0至100%之间';return}
+ }
+ $('saveEventBtn').disabled=true;
+ try{
+  const result=await call('/contracts/event',p);
+  let uploadError='';
+  if(file){try{await uploadInvoiceImage(p.id,result.event_id,file)}catch(err){uploadError=err.message}}
+  $('eventModal').close();selected=await call('/contracts/detail',{id:p.id});drawDetail();await refresh();
+  $('error').textContent=uploadError?'开票记录已保存，但图片上传失败：'+uploadError+'。可在开票记录中重新上传。':'';
+ }catch(err){$('eventError').textContent=err.message}
+ finally{$('saveEventBtn').disabled=false}
+}
+init();
+</script></body></html>
