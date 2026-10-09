@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<title>瑞渊办公｜员工工作台</title>
+<style>
+:root{--green:#174b39;--ink:#244031;--muted:#738679;--line:#e0e9e2;--bg:#f3f7f4}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Microsoft YaHei",sans-serif}
+[hidden]{display:none!important}button,a{font:inherit}button{cursor:pointer}a{text-decoration:none;color:inherit}
+header{background:var(--green);color:white;padding:19px 5%}.top{max-width:1150px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+.brand{font-size:23px;font-weight:800}.brand small{display:block;font-size:11px;letter-spacing:2px;font-weight:400;color:#c6ddce;margin-top:3px}
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.actions a,.actions button{background:transparent;color:white;border:1px solid #ffffff80;padding:9px 13px;border-radius:8px}
+main{max-width:1150px;margin:38px auto;padding:0 20px}.welcome{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+h1{font-size:29px;margin:0 0 8px}h2{font-size:18px;margin:0 0 8px;color:var(--green)}p{color:var(--muted);line-height:1.7;margin:0}
+.notice{background:#fff;border:1px solid var(--line);border-radius:12px;padding:17px 20px;margin:25px 0}
+.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}.card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:25px 22px;min-height:190px;display:flex;flex-direction:column;box-shadow:0 5px 18px #16432c0b;transition:transform .18s,border-color .18s}
+.card:hover{transform:translateY(-3px);border-color:#9bc5a9}.icon{display:grid;place-items:center;width:48px;height:48px;border-radius:12px;background:#e5f2e9;color:var(--green);font-size:18px;font-weight:800}
+.card h2{margin:16px 0 6px}.card p{font-size:13px;flex:1}.card .go{font-size:12px;color:#578369;margin-top:14px}
+.foot{font-size:12px;color:#85988a;margin:32px 0}
+#gate{min-height:80vh;display:grid;place-items:center;padding:20px}.gate-box{width:100%;max-width:440px;background:white;border:1px solid var(--line);border-radius:14px;padding:30px;text-align:center}.gate-box h2{font-size:22px}.gate-box p{margin:14px 0}.gate-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.gate-actions a,.gate-actions button{padding:10px 16px;border:1px solid #cddfd2;border-radius:8px;background:white;color:var(--green)}.gate-actions button{background:var(--green);color:white}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#153d2e;color:white;border-radius:8px;padding:12px 20px;display:none;max-width:90vw;z-index:9}
+@media(max-width:900px){.cards{grid-template-columns:repeat(2,1fr)}}@media(max-width:600px){.cards{grid-template-columns:1fr}h1{font-size:24px}.card{min-height:160px}.actions{gap:7px}}
+</style>
+</head>
+<body>
+<section id="gate"><div class="gate-box"><h2>瑞渊办公系统</h2><p id="gateMessage">正在验证员工身份……</p><div class="gate-actions"><a href="/login.html">返回登录</a><button id="retry" type="button">重新验证</button></div></div></section>
+<div id="app" hidden>
+<header><div class="top"><div class="brand">瑞渊办公<small>RUIYUAN · EMPLOYEE</small></div><div class="actions"><span id="username"></span><a href="/">公司官网</a><button type="button" id="logout">退出登录</button></div></div></header>
+<main>
+<div class="welcome"><div><h1>员工工作台</h1><p>现场工作打卡、工作简讯、个人报销与月度记录。</p></div><div id="today" style="font-size:13px;color:#738679"></div></div>
+<div class="notice">现场工作时请及时定位打卡并填写工作简讯。报销单可以日后填写，但报销日期必须由所选打卡记录自动确定，不能手工修改。同一天只能使用一次报销资格。</div>
+<div class="cards">
+<a class="card" href="/monthly_reimbursements.html#checkin"><div class="icon">定位</div><h2>现场工作打卡</h2><p>到达工作地点后实时定位，填写本次工作简讯，保存工作地点与打卡时间。</p><div class="go">进入现场打卡 →</div></a>
+<a class="card" href="/monthly_reimbursements.html#reimbursement"><div class="icon">报销</div><h2>填写报销单</h2><p>选择尚未用于报销的有效打卡记录，自动带出报销日期，填写事由和多条费用。</p><div class="go">填写个人报销 →</div></a>
+<a class="card" href="/monthly_reimbursements.html#checkin"><div class="icon">记录</div><h2>我的打卡记录</h2><p>查看本人现场打卡时间、工作简讯、位置及对应报销资格。</p><div class="go">查看打卡记录 →</div></a>
+<a class="card" href="/monthly_reimbursements.html#reimbursement"><div class="icon">单据</div><h2>我的报销记录</h2><p>查看本人已提交的报销单、各条费用审批状态与批准金额。</p><div class="go">查看报销记录 →</div></a>
+<a class="card" href="/monthly_reimbursements.html#monthly"><div class="icon">月度</div><h2>月度工资及报销</h2><p>查看本人每月工资、已批准报销及月度结算情况，具体数据以后台权限为准。</p><div class="go">查看月度记录 →</div></a>
+<a class="card" href="/login.html" id="passwordCard"><div class="icon">密码</div><h2>修改登录密码</h2><p>使用现有员工登录系统修改个人密码，不允许修改其他员工账号。</p><div class="go">进入密码管理 →</div></a>
+</div>
+<div class="foot">瑞渊公司办公系统 · 员工个人工作台 · 数据通过 Cloudflare Worker API 访问</div>
+</main></div>
+<div id="toast" role="status"></div>
+<script>
+'use strict';
+const API='https://api.ruiyuantechnology.com/api/ruiyuan';
+let csrf='';
+const gate=document.getElementById('gate');
+const app=document.getElementById('app');
+const msg=document.getElementById('gateMessage');
+async function api(path,options={}){
+ const controller=new AbortController();
+ const timer=setTimeout(()=>controller.abort(),15000);
+ try{
+  const response=await fetch(API+path,{...options,credentials:'include',cache:'no-store',headers:{Accept:'application/json',...options.headers},signal:controller.signal});
+  const data=await response.json();
+  if(!response.ok)throw Error(data.error||'接口不可用');
+  return data;
+ }finally{clearTimeout(timer)}
+}
+async function verify(){
+ gate.hidden=false;app.hidden=true;msg.textContent='正在验证员工身份……';
+ try{
+  const data=await api('/session');
+  if(!data.user){msg.textContent='请先登录办公系统';return}
+  if(data.user.must_change_password){msg.textContent='请先在登录页面修改初始密码';return}
+  if(data.user.role!=='employee'){
+   const homes={admin:'/wholemanagement.html',sales:'/sales.html',finance:'/finance.html'};
+   msg.textContent='当前账号不是普通员工，请进入对应的工作台';
+   if(homes[data.user.role]){
+    const link=document.createElement('a');link.href=homes[data.user.role];link.textContent='进入我的工作台 →';link.style.cssText='display:block;margin:12px;color:#174b39';
+    msg.appendChild(link);
+   }
+   return;
+  }
+  csrf=data.csrf_token||'';
+  document.getElementById('username').textContent=data.user.full_name||data.user.username||'员工';
+  document.getElementById('today').textContent=new Intl.DateTimeFormat('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'}).format(new Date());
+  gate.hidden=true;app.hidden=false;
+ }catch(error){msg.textContent='身份验证失败：'+(error.name==='AbortError'?'请求超时':error.message)}
+}
+function notice(text){const el=document.getElementById('toast');el.textContent=text;el.style.display='block';clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.style.display='none',3500)}
+document.getElementById('retry').addEventListener('click',verify);
+document.getElementById('logout').addEventListener('click',async()=>{
+ try{await api('/logout',{method:'POST',headers:{'Content-Type':'application/json','X-Ruiyuan-CSRF':csrf},body:'{}'});location.replace('/login.html')}
+ catch(error){notice('退出失败：'+error.message)}
+});
+window.addEventListener('pageshow',verify);
+</script>
+</body>
+</html>
