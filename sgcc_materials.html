@@ -3,7 +3,9 @@
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f2f7f4;color:#244536;font:14px/1.6 system-ui,-apple-system,"Microsoft YaHei",sans-serif}header{background:#174b39;color:white;padding:17px 5%}header a{color:white}header .bar{max-width:1220px;margin:auto;display:flex;justify-content:space-between;gap:12px;align-items:center}main{max-width:1220px;margin:28px auto;padding:0 16px}.panel{background:white;border:1px solid #dce8df;border-radius:12px;padding:22px;margin:18px 0}h1{font-size:26px;margin:0}h2{font-size:19px;margin:0 0 12px}.muted{color:#74877a}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.between{justify-content:space-between}button{padding:9px 14px;background:white;border:1px solid #cbdcd0;border-radius:7px;color:#174b39;cursor:pointer}button.primary{background:#174b39;color:white}button:disabled{opacity:.5}input,textarea,select{width:100%;border:1px solid #cbdcd0;border-radius:7px;padding:10px;font:inherit}label{font-size:12px;font-weight:700;display:block;margin-bottom:5px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.search{max-width:400px}.scroll{overflow:auto}table{width:100%;border-collapse:collapse;min-width:1050px}th,td{text-align:left;border-bottom:1px solid #e5eee7;padding:9px;font-size:12px}th{background:#edf5ee}td img{width:65px;height:55px;object-fit:contain;background:#f6f6f6;border-radius:5px}.photo{width:220px;max-width:100%;height:160px;object-fit:contain;border:1px solid #dce8df;border-radius:8px;background:#fafafa}.error{color:#b4232c}.success{color:#18714a}[hidden]{display:none!important}#gate{min-height:70vh;display:grid;place-items:center}#gate .panel{text-align:center}#app[hidden]{display:none!important}.foot{color:#85998b;font-size:12px;margin:25px 0}@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.grid{grid-template-columns:1fr}header .bar{flex-wrap:wrap}}
 /* 商品图片点击放大：只读，不改变任何数据 */
-td img[data-photo]:not([hidden]),#photoPreview:not([hidden]){cursor:zoom-in}
+td [data-view-photo]{cursor:zoom-in;display:inline-flex;align-items:center;justify-content:center;padding:2px;border:1px solid #dce8df;background:#f6f6f6;border-radius:6px;min-width:70px;min-height:58px}
+td [data-view-photo] img{pointer-events:none}td [data-view-photo]:hover{border-color:#338765;box-shadow:0 0 0 2px #33876520}
+#photoPreview:not([hidden]){cursor:zoom-in}
 #imageViewer{position:fixed;inset:0;background:rgba(8,22,16,.91);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
 #imageViewer[hidden]{display:none!important}
 #imageViewer img{max-width:96vw;max-height:80vh;object-fit:contain;background:#fff;border-radius:5px;cursor:zoom-in;transform-origin:center;transition:transform .12s}
@@ -46,7 +48,7 @@ async function api(path,data){const ctrl=new AbortController(),timer=setTimeout(
 function showEditor(item=null){editing=item?.id||null;$('formTitle').textContent=item?'编辑物资词条':'新增物资词条';$('materialForm').reset();for(const key of ['sequence_no','category','material_code','product_code','entry_code','name','model','manufacturer','unit','price','notes'])$('materialForm').elements.namedItem(key).value=item?.[key]??(key==='unit'?'个':key==='price'?'0':'');$('photoFile').value='';$('photoPreview').hidden=true;$('photoPreview').removeAttribute('src');$('listPanel').hidden=true;$('editPanel').hidden=false;if(item?.image_path)loadPhoto(item.id,$('photoPreview'));window.scrollTo(0,0)}
 function showList(){$('editPanel').hidden=true;$('listPanel').hidden=false;editing=null;window.scrollTo(0,0)}
 async function loadPhoto(id,img){try{const r=await fetch(API+'/sgcc-materials/image?id='+encodeURIComponent(id),{credentials:'include',cache:'no-store'});if(!r.ok)return;const blob=await r.blob();const u=URL.createObjectURL(blob);img.onload=()=>URL.revokeObjectURL(u);img.src=u;img.hidden=false}catch{}}
-function render(){const q=$('search').value.trim().toLowerCase();const data=items.filter(x=>[x.sequence_no,x.category,x.material_code,x.product_code,x.entry_code,x.name,x.model,x.manufacturer].some(v=>String(v||'').toLowerCase().includes(q)));$('rows').innerHTML=data.map(x=>`<tr><td>${esc(x.sequence_no)}</td><td>${esc(x.category)}</td><td>${esc(x.material_code)}</td><td>${esc(x.product_code)}</td><td>${esc(x.entry_code)}</td><td>${esc(x.name)}</td><td>${esc(x.model)}</td><td>${esc(x.manufacturer)}</td><td>${esc(x.unit)}</td><td>¥${Number(x.price||0).toFixed(2)}</td><td><img data-photo="${esc(x.id)}" alt="商品图片" hidden></td><td>${actor?.role==='admin'?`<button data-edit="${esc(x.id)}">编辑</button> <button data-archive="${esc(x.id)}">归档</button>`:'仅查看'}</td></tr>`).join('')||'<tr><td colspan="12">暂无物资词条</td></tr>';document.querySelectorAll('img[data-photo]').forEach(img=>{const x=data.find(z=>z.id===img.dataset.photo);if(x?.image_path)loadPhoto(x.id,img)})}
+function render(){const q=$('search').value.trim().toLowerCase();const data=items.filter(x=>[x.sequence_no,x.category,x.material_code,x.product_code,x.entry_code,x.name,x.model,x.manufacturer].some(v=>String(v||'').toLowerCase().includes(q)));$('rows').innerHTML=data.map(x=>`<tr><td>${esc(x.sequence_no)}</td><td>${esc(x.category)}</td><td>${esc(x.material_code)}</td><td>${esc(x.product_code)}</td><td>${esc(x.entry_code)}</td><td>${esc(x.name)}</td><td>${esc(x.model)}</td><td>${esc(x.manufacturer)}</td><td>${esc(x.unit)}</td><td>¥${Number(x.price||0).toFixed(2)}</td><td>${x.image_path?`<button type="button" data-view-photo="${esc(x.id)}" title="点击放大商品图片" aria-label="放大查看商品图片"><img data-photo="${esc(x.id)}" alt="商品图片" hidden></button>`:'—'}</td><td>${actor?.role==='admin'?`<button data-edit="${esc(x.id)}">编辑</button> <button data-archive="${esc(x.id)}">归档</button>`:'仅查看'}</td></tr>`).join('')||'<tr><td colspan="12">暂无物资词条</td></tr>';document.querySelectorAll('img[data-photo]').forEach(img=>{const x=data.find(z=>z.id===img.dataset.photo);if(x?.image_path)loadPhoto(x.id,img)})}
 async function load(){const d=await api('/sgcc-materials');items=d.items||[];render()}
 async function compress(file){if(file.size>20*1024*1024)throw Error('原始图片不能超过20MB');const bitmap=await createImageBitmap(file);let w=bitmap.width,h=bitmap.height,scale=Math.min(1,1200/Math.max(w,h));w=Math.max(1,Math.round(w*scale));h=Math.max(1,Math.round(h*scale));const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(bitmap,0,0,w,h);bitmap.close();let quality=.8;for(let n=0;n<5;n++){const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',quality));if(!blob)throw Error('浏览器不支持 WebP 图片');if(blob.size<=1048576)return blob;quality-=.13}throw Error('图片压缩后仍超过1MB，请换较小图片')}
 async function upload(id,file){const blob=await compress(file);const r=await fetch(API+'/sgcc-materials/image?id='+encodeURIComponent(id),{method:'POST',credentials:'include',headers:{'Content-Type':'image/webp','X-Ruiyuan-CSRF':csrf},body:blob});const d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||'图片上传失败')}
@@ -55,8 +57,8 @@ async function verify(){if(verifying)return;verifying=true;try{const d=await api
 let viewerPreviousFocus=null;
 let viewerObjectUrl='';
 let viewerRequest=0;
-async function openImageViewer(img){
- if(!img||img.hidden)return;
+async function openImageViewer(img,explicitId=''){
+ if(!img)return;
  const requestId=++viewerRequest;
  viewerPreviousFocus=document.activeElement;
  const row=img.closest('tr');
@@ -68,14 +70,16 @@ async function openImageViewer(img){
  document.body.style.overflow='hidden';
  $('viewerClose').focus();
  try{
-  const materialId=img.dataset.photo;
+  const materialId=explicitId||img.dataset.photo;
   if(materialId){
    const r=await fetch(API+'/sgcc-materials/image?id='+encodeURIComponent(materialId),{credentials:'include',cache:'no-store'});
    if(!r.ok)throw new Error('图片读取失败（HTTP '+r.status+'）');
    const blob=await r.blob();
    if(requestId!==viewerRequest||$('imageViewer').hidden)return;
    viewerObjectUrl=URL.createObjectURL(blob);
-   $('viewerImage').src=viewerObjectUrl;
+   const full=$('viewerImage');
+   full.onerror=()=>{$('viewerTip').textContent='图片解码失败，请检查上传文件格式';};
+   full.src=viewerObjectUrl;
   }else{
    if(!img.src)throw new Error('没有可查看的图片');
    $('viewerImage').src=img.src;
@@ -97,9 +101,14 @@ function closeImageViewer(){
  if(viewerPreviousFocus?.isConnected)viewerPreviousFocus.focus();
 }
 $('rows').addEventListener('click',e=>{
- const img=e.target.closest('img[data-photo]');
- if(img)openImageViewer(img);
-});
+ const button=e.target.closest('[data-view-photo]');
+ if(!button)return;
+ e.preventDefault();
+ e.stopImmediatePropagation();
+ const id=button.dataset.viewPhoto;
+ const img=button.querySelector('img[data-photo]');
+ if(img)openImageViewer(img,id);
+},true);
 $('photoPreview').addEventListener('click',()=>openImageViewer($('photoPreview')));
 $('viewerClose').onclick=closeImageViewer;
 $('viewerImage').onclick=e=>{e.stopPropagation();$('viewerImage').classList.toggle('zoomed')};
