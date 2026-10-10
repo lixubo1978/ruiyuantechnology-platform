@@ -51,23 +51,48 @@ async function load(){const d=await api('/sgcc-materials');items=d.items||[];ren
 async function compress(file){if(file.size>20*1024*1024)throw Error('原始图片不能超过20MB');const bitmap=await createImageBitmap(file);let w=bitmap.width,h=bitmap.height,scale=Math.min(1,1200/Math.max(w,h));w=Math.max(1,Math.round(w*scale));h=Math.max(1,Math.round(h*scale));const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(bitmap,0,0,w,h);bitmap.close();let quality=.8;for(let n=0;n<5;n++){const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',quality));if(!blob)throw Error('浏览器不支持 WebP 图片');if(blob.size<=1048576)return blob;quality-=.13}throw Error('图片压缩后仍超过1MB，请换较小图片')}
 async function upload(id,file){const blob=await compress(file);const r=await fetch(API+'/sgcc-materials/image?id='+encodeURIComponent(id),{method:'POST',credentials:'include',headers:{'Content-Type':'image/webp','X-Ruiyuan-CSRF':csrf},body:blob});const d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||'图片上传失败')}
 async function verify(){if(verifying)return;verifying=true;try{const d=await api('/session');if(!d.user){$('gateMsg').textContent='请先登录';return}if(d.user.must_change_password){$('gateMsg').textContent='请先修改初始密码';return}if(!['admin','finance','partner'].includes(d.user.role)){$('gateMsg').textContent='没有物资词条查看权限';return}actor=d.user;csrf=d.csrf_token||'';$('username').textContent=actor.full_name||actor.username;$('new').hidden=actor.role!=='admin';$('workHome').href=actor.role==='partner'?'/login.html':'/wholemanagement.html';$('workHome').textContent=actor.role==='partner'?'返回登录页 →':'返回管理工作台 →';await load();$('gate').hidden=true;$('app').hidden=false}catch(e){$('gateMsg').textContent='加载失败：'+e.message}finally{verifying=false}}
-// 只复用当前已经加载的图片，不额外请求数据库或修改记录。
+// 放大时独立读取图片，避免复用已被浏览器释放的缩略图 URL。
 let viewerPreviousFocus=null;
-function openImageViewer(img){
- if(!img||img.hidden||!img.src)return;
+let viewerObjectUrl='';
+let viewerRequest=0;
+async function openImageViewer(img){
+ if(!img||img.hidden)return;
+ const requestId=++viewerRequest;
  viewerPreviousFocus=document.activeElement;
  const row=img.closest('tr');
  $('viewerTitle').textContent=row?.querySelector('td:nth-child(6)')?.textContent?.trim()||'商品说明图片';
  $('viewerImage').classList.remove('zoomed');
- $('viewerImage').src=img.src;
+ $('viewerImage').removeAttribute('src');
+ $('viewerTip').textContent='正在加载高清图片……';
  $('imageViewer').hidden=false;
  document.body.style.overflow='hidden';
  $('viewerClose').focus();
+ try{
+  const materialId=img.dataset.photo;
+  if(materialId){
+   const r=await fetch(API+'/sgcc-materials/image?id='+encodeURIComponent(materialId),{credentials:'include',cache:'no-store'});
+   if(!r.ok)throw new Error('图片读取失败（HTTP '+r.status+'）');
+   const blob=await r.blob();
+   if(requestId!==viewerRequest||$('imageViewer').hidden)return;
+   viewerObjectUrl=URL.createObjectURL(blob);
+   $('viewerImage').src=viewerObjectUrl;
+  }else{
+   if(!img.src)throw new Error('没有可查看的图片');
+   $('viewerImage').src=img.src;
+  }
+  $('viewerTip').textContent='点击大图可进一步放大或恢复 · 按 Esc 或点击空白处关闭';
+ }catch(err){
+  if(requestId===viewerRequest&&!$('imageViewer').hidden){
+   $('viewerTip').textContent='图片加载失败：'+err.message;
+  }
+ }
 }
 function closeImageViewer(){
+ ++viewerRequest;
  $('imageViewer').hidden=true;
  $('viewerImage').classList.remove('zoomed');
  $('viewerImage').removeAttribute('src');
+ if(viewerObjectUrl){URL.revokeObjectURL(viewerObjectUrl);viewerObjectUrl='';}
  document.body.style.overflow='';
  if(viewerPreviousFocus?.isConnected)viewerPreviousFocus.focus();
 }
