@@ -2,6 +2,15 @@
 <html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>瑞渊办公｜国网商城物资词条</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#f2f7f4;color:#244536;font:14px/1.6 system-ui,-apple-system,"Microsoft YaHei",sans-serif}header{background:#174b39;color:white;padding:17px 5%}header a{color:white}header .bar{max-width:1220px;margin:auto;display:flex;justify-content:space-between;gap:12px;align-items:center}main{max-width:1220px;margin:28px auto;padding:0 16px}.panel{background:white;border:1px solid #dce8df;border-radius:12px;padding:22px;margin:18px 0}h1{font-size:26px;margin:0}h2{font-size:19px;margin:0 0 12px}.muted{color:#74877a}.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.between{justify-content:space-between}button{padding:9px 14px;background:white;border:1px solid #cbdcd0;border-radius:7px;color:#174b39;cursor:pointer}button.primary{background:#174b39;color:white}button:disabled{opacity:.5}input,textarea,select{width:100%;border:1px solid #cbdcd0;border-radius:7px;padding:10px;font:inherit}label{font-size:12px;font-weight:700;display:block;margin-bottom:5px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.search{max-width:400px}.scroll{overflow:auto}table{width:100%;border-collapse:collapse;min-width:1050px}th,td{text-align:left;border-bottom:1px solid #e5eee7;padding:9px;font-size:12px}th{background:#edf5ee}td img{width:65px;height:55px;object-fit:contain;background:#f6f6f6;border-radius:5px}.photo{width:220px;max-width:100%;height:160px;object-fit:contain;border:1px solid #dce8df;border-radius:8px;background:#fafafa}.error{color:#b4232c}.success{color:#18714a}[hidden]{display:none!important}#gate{min-height:70vh;display:grid;place-items:center}#gate .panel{text-align:center}#app[hidden]{display:none!important}.foot{color:#85998b;font-size:12px;margin:25px 0}@media(max-width:800px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.grid{grid-template-columns:1fr}header .bar{flex-wrap:wrap}}
+/* 商品图片点击放大：只读，不改变任何数据 */
+td img[data-photo]:not([hidden]),#photoPreview:not([hidden]){cursor:zoom-in}
+#imageViewer{position:fixed;inset:0;background:rgba(8,22,16,.91);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+#imageViewer[hidden]{display:none!important}
+#imageViewer img{max-width:96vw;max-height:80vh;object-fit:contain;background:#fff;border-radius:5px;cursor:zoom-in;transform-origin:center;transition:transform .12s}
+#imageViewer img.zoomed{transform:scale(1.7);cursor:zoom-out}
+#imageViewer .viewerBar{width:min(96vw,1100px);display:flex;align-items:center;justify-content:space-between;gap:15px;color:white;margin-bottom:12px}
+#imageViewer .viewerBar button{font-size:16px}
+#imageViewer .viewerTip{color:#c9d6ce;font-size:12px;margin-top:14px;text-align:center}
 </style></head><body>
 <section id="gate"><div class="panel"><h2>瑞渊办公系统</h2><p id="gateMsg">正在验证身份……</p><a href="/login.html">返回登录</a> <button id="retry">重新验证</button></div></section>
 <div id="app" hidden><header><div class="bar"><strong>瑞渊办公 · 国网商城物资词条</strong><div class="row"><span id="username"></span><a id="workHome" href="/wholemanagement.html">返回管理工作台 →</a><button id="logout">退出登录</button></div></div></header>
@@ -22,6 +31,11 @@
 <div style="margin-top:16px"><label>商品说明图片（1张，自动压缩 WebP，最大1MB）</label><div class="row"><input type="file" id="photoFile" accept="image/*" style="max-width:400px"><img id="photoPreview" class="photo" alt="商品说明图片" hidden></div><p class="muted">先保存词条，系统再上传图片。编辑已有词条时可以替换图片。</p></div>
 <div class="row" style="margin-top:20px"><button class="primary" id="save" type="submit">保存物资词条</button><button type="button" id="cancel">取消</button></div></form></section>
 <div class="foot">瑞渊办公系统 · 仅通过 Cloudflare Worker API 访问数据库和图片</div></main></div>
+<div id="imageViewer" hidden role="dialog" aria-modal="true" aria-label="商品图片放大查看" tabindex="-1">
+ <div class="viewerBar"><strong id="viewerTitle">商品说明图片</strong><button id="viewerClose" type="button">关闭 ×</button></div>
+ <div style="max-width:96vw;max-height:80vh;overflow:auto;display:grid;place-items:center"><img id="viewerImage" alt="商品说明图片大图"></div>
+ <div class="viewerTip">点击大图可进一步放大或恢复 · 按 Esc 或点击空白处关闭</div>
+</div>
 <script>
 'use strict';
 const API='https://api.ruiyuantechnology.com/api/ruiyuan', $=id=>document.getElementById(id);
@@ -37,6 +51,35 @@ async function load(){const d=await api('/sgcc-materials');items=d.items||[];ren
 async function compress(file){if(file.size>20*1024*1024)throw Error('原始图片不能超过20MB');const bitmap=await createImageBitmap(file);let w=bitmap.width,h=bitmap.height,scale=Math.min(1,1200/Math.max(w,h));w=Math.max(1,Math.round(w*scale));h=Math.max(1,Math.round(h*scale));const canvas=document.createElement('canvas');canvas.width=w;canvas.height=h;const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);ctx.drawImage(bitmap,0,0,w,h);bitmap.close();let quality=.8;for(let n=0;n<5;n++){const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',quality));if(!blob)throw Error('浏览器不支持 WebP 图片');if(blob.size<=1048576)return blob;quality-=.13}throw Error('图片压缩后仍超过1MB，请换较小图片')}
 async function upload(id,file){const blob=await compress(file);const r=await fetch(API+'/sgcc-materials/image?id='+encodeURIComponent(id),{method:'POST',credentials:'include',headers:{'Content-Type':'image/webp','X-Ruiyuan-CSRF':csrf},body:blob});const d=await r.json().catch(()=>({}));if(!r.ok)throw Error(d.error||'图片上传失败')}
 async function verify(){if(verifying)return;verifying=true;try{const d=await api('/session');if(!d.user){$('gateMsg').textContent='请先登录';return}if(d.user.must_change_password){$('gateMsg').textContent='请先修改初始密码';return}if(!['admin','finance','partner'].includes(d.user.role)){$('gateMsg').textContent='没有物资词条查看权限';return}actor=d.user;csrf=d.csrf_token||'';$('username').textContent=actor.full_name||actor.username;$('new').hidden=actor.role!=='admin';$('workHome').href=actor.role==='partner'?'/login.html':'/wholemanagement.html';$('workHome').textContent=actor.role==='partner'?'返回登录页 →':'返回管理工作台 →';await load();$('gate').hidden=true;$('app').hidden=false}catch(e){$('gateMsg').textContent='加载失败：'+e.message}finally{verifying=false}}
+// 只复用当前已经加载的图片，不额外请求数据库或修改记录。
+let viewerPreviousFocus=null;
+function openImageViewer(img){
+ if(!img||img.hidden||!img.src)return;
+ viewerPreviousFocus=document.activeElement;
+ const row=img.closest('tr');
+ $('viewerTitle').textContent=row?.querySelector('td:nth-child(6)')?.textContent?.trim()||'商品说明图片';
+ $('viewerImage').classList.remove('zoomed');
+ $('viewerImage').src=img.src;
+ $('imageViewer').hidden=false;
+ document.body.style.overflow='hidden';
+ $('viewerClose').focus();
+}
+function closeImageViewer(){
+ $('imageViewer').hidden=true;
+ $('viewerImage').classList.remove('zoomed');
+ $('viewerImage').removeAttribute('src');
+ document.body.style.overflow='';
+ if(viewerPreviousFocus?.isConnected)viewerPreviousFocus.focus();
+}
+$('rows').addEventListener('click',e=>{
+ const img=e.target.closest('img[data-photo]');
+ if(img)openImageViewer(img);
+});
+$('photoPreview').addEventListener('click',()=>openImageViewer($('photoPreview')));
+$('viewerClose').onclick=closeImageViewer;
+$('viewerImage').onclick=e=>{e.stopPropagation();$('viewerImage').classList.toggle('zoomed')};
+$('imageViewer').addEventListener('click',e=>{if(e.target===$('imageViewer'))closeImageViewer()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('imageViewer').hidden)closeImageViewer()});
 $('retry').onclick=verify;$('refresh').onclick=()=>load().catch(e=>notice(e.message,true));$('search').oninput=render;$('new').onclick=()=>showEditor();$('close').onclick=showList;$('cancel').onclick=showList;
 $('rows').onclick=async e=>{const edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-archive]');const id=edit?.dataset.edit||del?.dataset.archive;if(!id)return;const x=items.find(z=>z.id===id);if(actor?.role!=='admin'){notice('仅管理员可修改词条',true);return}if(edit)showEditor(x);else if(confirm('确认归档该物资词条？历史数据不会删除。')){try{await api('/sgcc-materials/archive',{id});await load();notice('归档成功')}catch(ex){notice(ex.message,true)}}};
 $('photoFile').onchange=()=>{const file=$('photoFile').files[0];if(!file)return;if(previewUrl)URL.revokeObjectURL(previewUrl);previewUrl=URL.createObjectURL(file);$('photoPreview').src=previewUrl;$('photoPreview').hidden=false};
