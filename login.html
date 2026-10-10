@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -22,14 +21,12 @@ h1{font-size:27px;margin:0 0 8px;color:var(--deep)}
 label{display:block;font-size:14px;font-weight:600;margin-bottom:7px}
 input{width:100%;border:1px solid var(--line);border-radius:8px;padding:12px 13px;font:inherit;outline:none}
 input:focus{border-color:#338765;box-shadow:0 0 0 3px #33876520}
-.pw{display:flex;gap:8px}
-.pw input{min-width:0;flex:1}
+.pw{display:flex;gap:8px}.pw input{min-width:0;flex:1}
 .secondary{border:1px solid var(--line);background:#fff;border-radius:8px;padding:0 13px;cursor:pointer;white-space:nowrap}
 .primary{border:0;background:var(--green);color:#fff;border-radius:8px;padding:13px;width:100%;font:inherit;font-weight:700;cursor:pointer}
 .primary:disabled{opacity:.6;cursor:wait}
 .message{min-height:24px;margin-top:15px;color:#b12f36;font-size:13px;white-space:pre-wrap}
-.message.ok{color:#18714a}
-.hidden{display:none!important}
+.message.ok{color:#18714a}.hidden{display:none!important}
 .note{font-size:12px;color:var(--muted);margin-top:18px;line-height:1.7}
 footer{text-align:center;color:#8b9b91;font-size:12px;padding:20px}
 .remember-row{display:flex;align-items:center;gap:9px;margin:-2px 0 20px;cursor:pointer}
@@ -39,277 +36,60 @@ footer{text-align:center;color:#8b9b91;font-size:12px;padding:20px}
 </style>
 </head>
 <body>
-<header>
-<a href="/" class="brand">瑞渊科技<small>RUIYUAN TECHNOLOGY</small></a>
-<a class="back" href="/">← 返回官网</a>
-</header>
-<main>
-<section class="card" aria-labelledby="heading">
+<header><a href="/" class="brand">瑞渊科技<small>RUIYUAN TECHNOLOGY</small></a><a class="back" href="/">← 返回官网</a></header>
+<main><section class="card" aria-labelledby="heading">
 <h1 id="heading">瑞渊员工登录</h1>
 <p class="desc">请使用管理员分配的用户名和密码登录，密码可以是纯数字。</p>
-
 <form id="loginForm">
-<div class="field">
-<label for="username">用户名</label>
-<input id="username" autocomplete="username" maxlength="64" required placeholder="请输入用户名">
-</div>
-
-<div class="field">
-<label for="password">密码</label>
-<div class="pw">
-<input id="password" type="password" autocomplete="current-password" maxlength="128" required placeholder="请输入密码">
-<button class="secondary" id="toggle" type="button">显示</button>
-</div>
-</div>
-
-<label class="remember-row" for="rememberLogin">
-<input id="rememberLogin" type="checkbox">
-<span>记住用户名和密码，下次自动填写</span>
-</label>
-
+<div class="field"><label for="username">用户名</label><input id="username" autocomplete="username" maxlength="64" required placeholder="请输入用户名"></div>
+<div class="field"><label for="password">密码</label><div class="pw"><input id="password" type="password" autocomplete="current-password" maxlength="128" required placeholder="请输入密码"><button class="secondary" id="toggle" type="button">显示</button></div></div>
+<label class="remember-row" for="rememberLogin"><input id="rememberLogin" type="checkbox"><span>记住用户名和密码，下次自动填写</span></label>
 <button class="primary" id="submit" type="submit">登录办公系统</button>
 </form>
-
 <form id="changeForm" class="hidden">
 <p class="desc">首次登录或管理员重置密码后，必须先设置新密码。</p>
-<div class="field">
-<label for="oldPassword">当前密码</label>
-<input id="oldPassword" type="password" autocomplete="current-password" required>
-</div>
-<div class="field">
-<label for="newPassword">新密码（支持纯数字）</label>
-<input id="newPassword" type="password" autocomplete="new-password" minlength="1" maxlength="128" required>
-</div>
-<div class="field">
-<label for="confirmPassword">确认新密码</label>
-<input id="confirmPassword" type="password" autocomplete="new-password" required>
-</div>
+<div class="field"><label for="oldPassword">当前密码</label><input id="oldPassword" type="password" autocomplete="current-password" required></div>
+<div class="field"><label for="newPassword">新密码（支持纯数字）</label><input id="newPassword" type="password" autocomplete="new-password" minlength="1" maxlength="128" required></div>
+<div class="field"><label for="confirmPassword">确认新密码</label><input id="confirmPassword" type="password" autocomplete="new-password" required></div>
 <button class="primary" id="changeSubmit" type="submit">修改密码</button>
 </form>
-
 <div id="message" class="message" role="status" aria-live="polite"></div>
 <p class="note">本页面不连接 Supabase。登录、会话和权限验证统一通过瑞渊 Cloudflare API 完成。若后台尚未部署，将显示连接提示。</p>
-</section>
-</main>
-
+</section></main>
 <footer>© <span id="year"></span> 瑞渊科技 · 内部办公入口</footer>
-
 <script>
 'use strict';
-
 const API='https://api.ruiyuantechnology.com/api/ruiyuan';
 const $=id=>document.getElementById(id);
 const STORAGE_KEY='ruiyuan_saved_login_v1';
 let csrf='';
-
 $('year').textContent=new Date().getFullYear();
-
-$('toggle').onclick=()=>{
- const input=$('password');
- const show=input.type==='password';
- input.type=show?'text':'password';
- $('toggle').textContent=show?'隐藏':'显示';
-};
-
-function message(text,ok=false){
- $('message').textContent=text;
- $('message').classList.toggle('ok',ok);
-}
-
-function busy(button,on){
- button.disabled=on;
- button.dataset.label??=button.textContent;
- button.textContent=on?'请稍候…':button.dataset.label;
-}
-
-// 从网页本地存储恢复用户名和密码
-function restoreSavedLogin(){
- try{
-  const raw=localStorage.getItem(STORAGE_KEY);
-  if(!raw)return;
-  const saved=JSON.parse(raw);
-  if(!saved||typeof saved!=='object')return;
-  if(typeof saved.username!=='string'||typeof saved.password!=='string')return;
-  $('username').value=saved.username;
-  $('password').value=saved.password;
-  $('rememberLogin').checked=true;
- }catch(e){
-  console.warn('读取已保存账号失败');
- }
-}
-
-// 仅在登录成功后保存
-function saveLogin(username,password){
- try{
-  if($('rememberLogin').checked){
-   localStorage.setItem(STORAGE_KEY,JSON.stringify({
-    username,
-    password
-   }));
-  }else{
-   localStorage.removeItem(STORAGE_KEY);
-  }
- }catch(e){
-  message('登录成功，但浏览器未允许保存账号密码。',true);
- }
-}
-
-// 取消勾选立即清除本地凭据
-$('rememberLogin').addEventListener('change',()=>{
- if(!$('rememberLogin').checked){
-  try{
-   localStorage.removeItem(STORAGE_KEY);
-  }catch(e){}
- }
-});
-
+$('toggle').onclick=()=>{const input=$('password');const show=input.type==='password';input.type=show?'text':'password';$('toggle').textContent=show?'隐藏':'显示'};
+function message(text,ok=false){$('message').textContent=text;$('message').classList.toggle('ok',ok)}
+function busy(button,on){button.disabled=on;button.dataset.label??=button.textContent;button.textContent=on?'请稍候…':button.dataset.label}
+function restoreSavedLogin(){try{const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return;const saved=JSON.parse(raw);if(!saved||typeof saved!=='object')return;if(typeof saved.username!=='string'||typeof saved.password!=='string')return;$('username').value=saved.username;$('password').value=saved.password;$('rememberLogin').checked=true}catch(e){console.warn('读取已保存账号失败')}}
+function saveLogin(username,password){try{if($('rememberLogin').checked){localStorage.setItem(STORAGE_KEY,JSON.stringify({username,password}))}else{localStorage.removeItem(STORAGE_KEY)}}catch(e){message('登录成功，但浏览器未允许保存账号密码。',true)}}
+$('rememberLogin').addEventListener('change',()=>{if(!$('rememberLogin').checked){try{localStorage.removeItem(STORAGE_KEY)}catch(e){}}});
 restoreSavedLogin();
-
 async function request(path,options={}){
- const controller=new AbortController();
- const timeout=setTimeout(()=>controller.abort(),15000);
- try{
-  const res=await fetch(API+path,{
-   method:options.method||'GET',
-   credentials:'include',
-   cache:'no-store',
-   mode:'cors',
-   headers:{
-    Accept:'application/json',
-    ...(options.body?{'Content-Type':'application/json'}:{}),
-    ...(options.csrf?{'X-Ruiyuan-CSRF':options.csrf}:{})
-   },
-   body:options.body?JSON.stringify(options.body):undefined,
-   signal:controller.signal
-  });
-  const data=await res.json().catch(()=>({}));
-  if(!res.ok||data.error){
-   throw new Error(data.error||'请求失败（HTTP '+res.status+'）');
-  }
-  return data;
- }catch(e){
-  if(e.name==='AbortError')throw new Error('连接超时，请检查网络');
-  if(e instanceof TypeError)throw new Error('无法连接 API，请检查域名、CORS 与 Worker 部署');
-  throw e;
- }finally{
-  clearTimeout(timeout);
- }
+ const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),15000);
+ try{const res=await fetch(API+path,{method:options.method||'GET',credentials:'include',cache:'no-store',mode:'cors',headers:{Accept:'application/json',...(options.body?{'Content-Type':'application/json'}:{}),...(options.csrf?{'X-Ruiyuan-CSRF':options.csrf}:{})},body:options.body?JSON.stringify(options.body):undefined,signal:controller.signal});const data=await res.json().catch(()=>({}));if(!res.ok||data.error)throw new Error(data.error||'请求失败（HTTP '+res.status+'）');return data}
+ catch(e){if(e.name==='AbortError')throw new Error('连接超时，请检查网络');if(e instanceof TypeError)throw new Error('无法连接 API，请检查域名、CORS 与 Worker 部署');throw e}
+ finally{clearTimeout(timeout)}
 }
-
 function route(user){
  if(!user||!user.role)throw new Error('后台未返回有效身份');
-
- if(user.must_change_password){
-  $('loginForm').classList.add('hidden');
-  $('changeForm').classList.remove('hidden');
-  message('请先修改初始密码');
-  return;
- }
-
- if(user.role==='admin'){
-  location.replace('/wholemanagement.html');
-  return;
- }
- if(user.role==='sales'){
-  location.replace('/sales.html');
-  return;
- }
- if(user.role==='finance'){
-  location.replace('/finance.html');
-  return;
- }
- if(user.role==='employee'){
-  location.replace('/engineer.html');
-  return;
- }
-
- message('登录成功，但账号尚未分配销售或工程岗位，请联系管理员。',true);
+ if(user.must_change_password){$('loginForm').classList.add('hidden');$('changeForm').classList.remove('hidden');message('请先修改初始密码');return}
+ if(user.role==='admin'){location.replace('/wholemanagement.html');return}
+ if(user.role==='sales'){location.replace('/sales.html');return}
+ if(user.role==='finance'){location.replace('/finance.html');return}
+ if(user.role==='employee'){location.replace('/engineer.html');return}
+ if(user.role==='partner'){location.replace('/sgcc_materials.html');return}
+ message('登录成功，但账号尚未分配有效岗位，请联系管理员。',true);
 }
-
-$('loginForm').addEventListener('submit',async e=>{
- e.preventDefault();
- const btn=$('submit');
- busy(btn,true);
- message('');
-
- const username=$('username').value.trim();
- const password=$('password').value;
-
- try{
-  const data=await request('/login',{
-   method:'POST',
-   body:{username,password}
-  });
-
-  csrf=data.csrf_token||'';
-
-  // 验证登录成功后才保存账号密码
-  saveLogin(username,password);
-
-  route(data.user);
- }catch(err){
-  message(err.message);
- }finally{
-  busy(btn,false);
- }
-});
-
-$('changeForm').addEventListener('submit',async e=>{
- e.preventDefault();
-
- if($('newPassword').value!==$('confirmPassword').value){
-  message('两次新密码不一致');
-  return;
- }
-
- const btn=$('changeSubmit');
- busy(btn,true);
- message('');
-
- try{
-  const newPassword=$('newPassword').value;
-
-  await request('/password',{
-   method:'POST',
-   csrf,
-   body:{
-    old_password:$('oldPassword').value,
-    new_password:newPassword
-   }
-  });
-
-  // 如果用户选择记住密码，更新为新密码
-  if($('rememberLogin').checked){
-   saveLogin($('username').value.trim(),newPassword);
-  }else{
-   try{localStorage.removeItem(STORAGE_KEY)}catch(e){}
-  }
-
-  $('changeForm').classList.add('hidden');
-  $('loginForm').classList.remove('hidden');
-  $('password').value='';
-
-  $('oldPassword').value='';
-  $('newPassword').value='';
-  $('confirmPassword').value='';
-
-  message('密码修改成功，请使用新密码重新登录。',true);
- }catch(err){
-  message(err.message);
- }finally{
-  busy(btn,false);
- }
-});
-
-(async()=>{
- try{
-  const data=await request('/session');
-  csrf=data.csrf_token||'';
-  if(data.user)route(data.user);
- }catch(e){
-  // 未登录时正常显示登录表单
- }
-})();
+$('loginForm').addEventListener('submit',async e=>{e.preventDefault();const btn=$('submit');busy(btn,true);message('');const username=$('username').value.trim();const password=$('password').value;try{const data=await request('/login',{method:'POST',body:{username,password}});csrf=data.csrf_token||'';saveLogin(username,password);route(data.user)}catch(err){message(err.message)}finally{busy(btn,false)}});
+$('changeForm').addEventListener('submit',async e=>{e.preventDefault();if($('newPassword').value!==$('confirmPassword').value){message('两次新密码不一致');return}const btn=$('changeSubmit');busy(btn,true);message('');try{const newPassword=$('newPassword').value;await request('/password',{method:'POST',csrf,body:{old_password:$('oldPassword').value,new_password:newPassword}});if($('rememberLogin').checked){saveLogin($('username').value.trim(),newPassword)}else{try{localStorage.removeItem(STORAGE_KEY)}catch(e){}}$('changeForm').classList.add('hidden');$('loginForm').classList.remove('hidden');$('password').value='';$('oldPassword').value='';$('newPassword').value='';$('confirmPassword').value='';message('密码修改成功，请使用新密码重新登录。',true)}catch(err){message(err.message)}finally{busy(btn,false)}});
+(async()=>{try{const data=await request('/session');csrf=data.csrf_token||'';if(data.user)route(data.user)}catch(e){/* 未登录时正常显示登录表单 */}})();
 </script>
 </body>
 </html>
