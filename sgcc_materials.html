@@ -36,7 +36,7 @@ td [data-view-photo] img{pointer-events:none}td [data-view-photo]:hover{border-c
 <div id="imageViewer" hidden role="dialog" aria-modal="true" aria-label="商品图片放大查看" tabindex="-1">
  <div class="viewerBar"><strong id="viewerTitle">商品说明图片</strong><button id="viewerClose" type="button">关闭 ×</button></div>
  <div style="max-width:96vw;max-height:80vh;overflow:auto;display:grid;place-items:center"><img id="viewerImage" alt="商品说明图片大图" hidden></div>
- <div class="viewerTip">点击大图可进一步放大或恢复 · 按 Esc 或点击空白处关闭</div>
+ <div id="viewerTip" class="viewerTip" role="status">点击大图可进一步放大或恢复 · 按 Esc 或点击空白处关闭</div>
 </div>
 <script>
 'use strict';
