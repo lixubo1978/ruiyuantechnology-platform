@@ -7,8 +7,8 @@
 <section class="panel" id="formPanel" hidden><div class="row between"><h2 id="formTitle">新增工作票</h2><button id="return">返回清单</button></div><form id="form"><div class="grid"><div><label>工作时间 *</label><input id="workAt" type="datetime-local" required></div><div><label>工作地点（变电站名称）*</label><input id="locationField" maxlength="80" required placeholder="例如：南通东郊变电站，系统自动生成工作票名称"></div><div class="full"><label>工作票名称（系统自动生成，不可修改）</label><input id="titlePreview" readonly></div><div class="full"><label>工作内容 *</label><textarea id="contentField" rows="4" maxlength="5000" required></textarea></div><div class="full"><label>工作人员 *</label><textarea id="workersField" rows="2" maxlength="1000" required placeholder="多人可用顿号分隔"></textarea></div><div class="full"><label>工作票图片（4类必填 + 最多4张补充照片，合计最多8张；每张压缩WebP ≤1MB）</label><div class="grid" id="requiredPhotos">
 <div><label>① 工作票图片 *</label><input data-category="ticket" type="file" accept="image/*"></div>
 <div><label>② 现场照片 *</label><input data-category="site" type="file" accept="image/*"></div>
-<div><label>③ 开工前照片 *</label><input data-category="before" type="file" accept="image/*"></div>
-<div><label>④ 竣工后照片 *</label><input data-category="after" type="file" accept="image/*"></div>
+<div><label>③ 施工前照片 *</label><input data-category="before" type="file" accept="image/*"></div>
+<div><label>④ 施工后照片 *</label><input data-category="after" type="file" accept="image/*"></div>
 </div><label>其他补充照片（选填，最多4张）</label><input id="filesField" type="file" accept="image/*" multiple><p class="muted">已有的分类照片保留，无需重复上传。历史未分类照片显示为“历史照片”，需要补齐四类后才算完成。</p><div id="images" class="thumbs"></div></div></div><div class="row"><button class="primary" id="save" type="submit">保存工作票及图片</button><button type="button" id="cancel">取消</button></div></form></section></main></div>
 <dialog id="viewer"><div class="row between"><strong>工作票图片</strong><button id="closeViewer">关闭 ×</button></div><div class="viewerScroll"><img id="bigImage" alt="工作票大图"></div><p class="muted">点击图片放大/恢复，Esc关闭</p></dialog>
 <script>
